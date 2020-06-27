@@ -1,0 +1,3 @@
+include ':model'
+include ':ui'
+rootProject.name = "esist"
