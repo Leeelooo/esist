@@ -26,7 +26,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
+    api project(':model')
+    api fileTree(dir: "libs", include: ["*.jar"])
 
     api "androidx.room:room-runtime:$room_version"
     api "androidx.room:room-ktx:$room_version"

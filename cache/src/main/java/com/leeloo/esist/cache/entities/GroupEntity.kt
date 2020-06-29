@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "Groups")
 data class GroupEntity(
     @PrimaryKey @ColumnInfo(name = "group_id") val groupId: Long,
     @ColumnInfo(name = "group_name") val groupName: String,
