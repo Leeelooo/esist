@@ -1,3 +1,5 @@
 package com.leeloo.esist.base
 
-interface BaseIntent
+interface BaseIntent<A : BaseAction> {
+    fun convertToAction(): A
+}
