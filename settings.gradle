@@ -1,8 +1,2 @@
-include ':domain'
-include ':presentation'
-include ':cache'
-include ':cache'
-include ':cache'
-include ':model'
-include ':ui'
+include ':app'
 rootProject.name = "esist"
