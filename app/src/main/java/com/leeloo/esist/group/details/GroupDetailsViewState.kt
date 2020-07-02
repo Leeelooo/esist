@@ -64,12 +64,12 @@ data class GroupDetailsViewState(
 
         fun changeFabState(
             group: GroupDetails?,
-            reverseState: Boolean
+            state: Boolean
         ): GroupDetailsViewState = GroupDetailsViewState(
             loading = false,
             group = group,
             error = null,
-            isFabOpened = reverseState,
+            isFabOpened = state,
             membersLoading = false,
             membersToAdd = emptyList(),
             membersLoadingError = null,

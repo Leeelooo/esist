@@ -1,8 +1,24 @@
 package com.leeloo.esist.base
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
-interface BaseViewModel<VS : BaseViewState, I : BaseIntent> {
-    fun viewStatesFlow(): Flow<VS>
-    fun processIntents(intents: Flow<I>)
+abstract class BaseViewModel<VS : BaseViewState, I : BaseIntent<A>, A : BaseAction> : ViewModel() {
+    protected abstract val stateFlow: Flow<VS>
+
+    protected abstract fun processAction(action: A)
+
+    fun viewStatesFlow(): Flow<VS> = stateFlow
+
+    fun processIntents(intents: Flow<I>) {
+        viewModelScope.launch {
+            intents.map { it.convertToAction() }
+                .collect { processAction(it) }
+        }
+    }
+
 }

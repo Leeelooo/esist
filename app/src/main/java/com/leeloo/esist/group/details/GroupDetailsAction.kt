@@ -4,14 +4,30 @@ import com.leeloo.esist.base.BaseAction
 
 sealed class GroupDetailsAction : BaseAction {
 
-    class LoadGroupDetailsAction(
-        val phrase: String
+    data class LoadGroupDetailsAction(
+        val groupId: Long
     ) : GroupDetailsAction()
 
     object FabClickAction : GroupDetailsAction()
 
-    object LoadMembersToAddAction : GroupDetailsAction()
+    object DialogDismissAction : GroupDetailsAction()
 
-    object LoadLessonsToAddAction : GroupDetailsAction()
+    data class LoadMembersToAddAction(
+        val groupId: Long
+    ) : GroupDetailsAction()
+
+    data class LoadLessonsToAddAction(
+        val groupId: Long
+    ) : GroupDetailsAction()
+
+    data class ChooseMemberToAdd(
+        val groupId: Long,
+        val memberId: Long
+    ) : GroupDetailsAction()
+
+    data class ChooseLessonToAdd(
+        val groupId: Long,
+        val lessonId: Long
+    ) : GroupDetailsAction()
 
 }

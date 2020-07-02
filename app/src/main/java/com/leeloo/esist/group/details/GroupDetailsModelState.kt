@@ -28,7 +28,12 @@ sealed class GroupDetailsModelState : BaseModelState<GroupDetailsViewState> {
 
     object FabClick : GroupDetailsModelState() {
         override fun reduce(oldState: GroupDetailsViewState): GroupDetailsViewState =
-            GroupDetailsViewState.changeFabState(oldState.group, !oldState.isFabOpened)
+            GroupDetailsViewState.changeFabState(oldState.group, true)
+    }
+
+    object DialogDismiss : GroupDetailsModelState() {
+        override fun reduce(oldState: GroupDetailsViewState): GroupDetailsViewState =
+            GroupDetailsViewState.changeFabState(oldState.group, false)
     }
 
     object MembersLoading : GroupDetailsModelState() {

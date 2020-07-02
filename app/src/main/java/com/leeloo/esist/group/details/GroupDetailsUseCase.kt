@@ -1,14 +1,17 @@
 package com.leeloo.esist.group.details
 
 import com.leeloo.esist.base.BaseUseCase
-import kotlinx.coroutines.flow.Flow
+import com.leeloo.esist.group.list.GroupModelState
 
-interface GroupDetailsUseCase : BaseUseCase {
-    fun getModelStateFlow(groupId: Long): Flow<GroupDetailsModelState>
+interface GroupDetailsUseCase : BaseUseCase<GroupModelState> {
+    fun getGroupDetails(groupId: Long)
 
-    suspend fun getLessonsToAdd(groupId: Long)
-    suspend fun getMembersToAdd(groupId: Long)
+    fun openFabOptions()
+    fun dismissDialog()
 
-    suspend fun addMemberToGroup(memberId: Long, groupId: Long)
-    suspend fun addLessonToGroup(lessonId: Long, groupId: Long)
+    fun getLessonsToAdd(groupId: Long)
+    fun getMembersToAdd(groupId: Long)
+
+    fun addMemberToGroup(memberId: Long, groupId: Long)
+    fun addLessonToGroup(lessonId: Long, groupId: Long)
 }

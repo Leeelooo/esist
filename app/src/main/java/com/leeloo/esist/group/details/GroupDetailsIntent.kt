@@ -4,21 +4,18 @@ import com.leeloo.esist.base.BaseIntent
 
 sealed class GroupDetailsIntent : BaseIntent<GroupDetailsAction> {
 
-    object InitialIntent : GroupDetailsIntent() {
-        override fun convertToAction(): GroupDetailsAction =
-            GroupDetailsAction.LoadGroupDetailsAction("")
-    }
-
-    object ReloadGroupIntent : GroupDetailsIntent() {
-        override fun convertToAction(): GroupDetailsAction =
-            GroupDetailsAction.LoadGroupDetailsAction("")
-    }
-
-    class ChangeFilterPhrase(
-        private val pharse: String
+    class InitialIntent(
+        private val groupId: Long
     ) : GroupDetailsIntent() {
         override fun convertToAction(): GroupDetailsAction =
-            GroupDetailsAction.LoadGroupDetailsAction(pharse)
+            GroupDetailsAction.LoadGroupDetailsAction(groupId)
+    }
+
+    class ReloadGroupIntent(
+        private val groupId: Long
+    ) : GroupDetailsIntent() {
+        override fun convertToAction(): GroupDetailsAction =
+            GroupDetailsAction.LoadGroupDetailsAction(groupId)
     }
 
     object AddIntent : GroupDetailsIntent() {
@@ -26,24 +23,53 @@ sealed class GroupDetailsIntent : BaseIntent<GroupDetailsAction> {
             GroupDetailsAction.FabClickAction
     }
 
-    object AddMemberIntent : GroupDetailsIntent() {
+    object DismissDialogIntent : GroupDetailsIntent() {
         override fun convertToAction(): GroupDetailsAction =
-            GroupDetailsAction.LoadMembersToAddAction
+            GroupDetailsAction.DialogDismissAction
     }
 
-    object AddLessonIntent : GroupDetailsIntent() {
+    class AddMemberIntent(
+        private val groupId: Long
+    ) : GroupDetailsIntent() {
         override fun convertToAction(): GroupDetailsAction =
-            GroupDetailsAction.LoadLessonsToAddAction
+            GroupDetailsAction.LoadMembersToAddAction(groupId)
     }
 
-    object ReloadMemberIntent : GroupDetailsIntent() {
+    class AddLessonIntent(
+        private val groupId: Long
+    ) : GroupDetailsIntent() {
         override fun convertToAction(): GroupDetailsAction =
-            GroupDetailsAction.LoadMembersToAddAction
+            GroupDetailsAction.LoadLessonsToAddAction(groupId)
     }
 
-    object ReloadLessonIntent : GroupDetailsIntent() {
+    class ReloadMemberIntent(
+        private val groupId: Long
+    ) : GroupDetailsIntent() {
         override fun convertToAction(): GroupDetailsAction =
-            GroupDetailsAction.LoadLessonsToAddAction
+            GroupDetailsAction.LoadMembersToAddAction(groupId)
+    }
+
+    class ReloadLessonIntent(
+        private val groupId: Long
+    ) : GroupDetailsIntent() {
+        override fun convertToAction(): GroupDetailsAction =
+            GroupDetailsAction.LoadLessonsToAddAction(groupId)
+    }
+
+    class ChooseMemberIntent(
+        private val groupId: Long,
+        private val memberId: Long
+    ) : GroupDetailsIntent() {
+        override fun convertToAction(): GroupDetailsAction =
+            GroupDetailsAction.ChooseMemberToAdd(groupId, memberId)
+    }
+
+    class ChooseLessonIntent(
+        private val groupId: Long,
+        private val lessonId: Long
+    ) : GroupDetailsIntent() {
+        override fun convertToAction(): GroupDetailsAction =
+            GroupDetailsAction.ChooseLessonToAdd(groupId, lessonId)
     }
 
 }

@@ -1,8 +1,8 @@
 package com.leeloo.esist.group
 
-import com.leeloo.esist.domain.base.BaseDataSource
-import com.leeloo.esist.model.Group
-import com.leeloo.esist.model.GroupDetails
+import com.leeloo.esist.base.BaseDataSource
+import com.leeloo.esist.vo.Group
+import com.leeloo.esist.vo.GroupDetails
 import kotlinx.coroutines.flow.Flow
 
 interface GroupLocalDataSource : BaseDataSource {
