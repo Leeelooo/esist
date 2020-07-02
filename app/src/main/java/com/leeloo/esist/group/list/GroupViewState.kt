@@ -24,7 +24,7 @@ data class GroupViewState(
 
         fun loadedGroups(groups: List<Group>): GroupViewState = GroupViewState(
             loading = false,
-            groups = emptyList(),
+            groups = groups,
             error = null,
             isDialogOpened = false,
             isGroupInserted = false,
@@ -51,7 +51,7 @@ data class GroupViewState(
 
         fun groupInserted(groups: List<Group>): GroupViewState = GroupViewState(
             loading = true,
-            groups = emptyList(),
+            groups = groups,
             error = null,
             isDialogOpened = false,
             isGroupInserted = true,
@@ -62,12 +62,12 @@ data class GroupViewState(
             groups: List<Group>,
             groupInsertionError: Throwable
         ): GroupViewState = GroupViewState(
-            loading = true,
-            groups = emptyList(),
+            loading = false,
+            groups = groups,
             error = null,
             isDialogOpened = false,
             isGroupInserted = false,
-            groupInsertionError = null
+            groupInsertionError = groupInsertionError
         )
 
     }
