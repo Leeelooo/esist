@@ -2,6 +2,7 @@ package com.leeloo.esist.vo
 
 import java.net.URI
 
+//TODO: members attendance infomation
 data class LessonDetails(
     val lessonId: Long,
     val lessonSubject: String,
