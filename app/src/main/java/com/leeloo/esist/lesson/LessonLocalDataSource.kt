@@ -1,8 +1,8 @@
 package com.leeloo.esist.lesson
 
-import com.leeloo.esist.domain.base.BaseDataSource
-import com.leeloo.esist.model.Lesson
-import com.leeloo.esist.model.LessonDetails
+import com.leeloo.esist.base.BaseDataSource
+import com.leeloo.esist.vo.Lesson
+import com.leeloo.esist.vo.LessonDetails
 import kotlinx.coroutines.flow.Flow
 
 interface LessonLocalDataSource : BaseDataSource {

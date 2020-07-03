@@ -1,9 +1,8 @@
 package com.leeloo.esist.member
 
-import com.leeloo.esist.domain.base.BaseDataSource
-import com.leeloo.esist.domain.vo.Result
-import com.leeloo.esist.model.Member
-import com.leeloo.esist.model.MemberDetails
+import com.leeloo.esist.base.BaseDataSource
+import com.leeloo.esist.vo.Member
+import com.leeloo.esist.vo.MemberDetails
 import kotlinx.coroutines.flow.Flow
 
 interface MemberLocalDataSource : BaseDataSource {
