@@ -1,7 +1,6 @@
 package com.leeloo.esist.lesson.list
 
 import com.leeloo.esist.base.BaseViewModel
-import com.leeloo.esist.group.list.GroupAction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject

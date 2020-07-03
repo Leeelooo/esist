@@ -1,9 +1,8 @@
 package com.leeloo.esist.lesson.list
 
 import com.leeloo.esist.base.BaseUseCase
-import com.leeloo.esist.group.list.GroupModelState
 
-interface LessonUseCase : BaseUseCase<GroupModelState> {
+interface LessonUseCase : BaseUseCase<LessonModelState> {
     fun getFilteredLessons(phrase: String)
 
     fun openDialog()

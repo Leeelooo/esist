@@ -45,5 +45,4 @@ sealed class LessonIntent : BaseIntent<LessonAction> {
             )
     }
 
-
 }
