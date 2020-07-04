@@ -23,15 +23,18 @@ data class GroupWithLessons(
         entityColumn = "lesson_id",
         associateBy = Junction(LessonGroupCrossRef::class)
     )
-    val lessons: List<RoomLesson>
+    val lessons: List<LessonEntity>
 )
 
-fun RoomMemberDetails.toMemberDetails(): MemberDetails = MemberDetails(
-    memberId = this.member.memberId,
-    firstName = this.member.firstName,
-    middleName = this.member.middleName,
-    lastName = this.member.lastName,
-    memberGroups = this.groups.map { it.group.toGroup() },
-    memberSchedule = this.groups.flatMap { it.lessons }.map { it.toLesson() },
-    memberColor = this.member.memberColor
-)
+fun RoomMemberDetails?.toMemberDetails(): MemberDetails? =
+    if (this == null) null
+    else MemberDetails(
+        memberId = this.member.memberId,
+        firstName = this.member.firstName,
+        middleName = this.member.middleName,
+        lastName = this.member.lastName,
+        emailAddress = this.member.emailAddress,
+        memberGroups = this.groups.map { it.group.toGroup() },
+        memberSchedule = this.groups.flatMap { it.lessons }.map { it.toLesson() },
+        memberColor = this.member.memberColor
+    )

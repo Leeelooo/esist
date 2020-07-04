@@ -6,17 +6,17 @@ import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class MemberViewModel @Inject constructor(
-    private val memberUseCase: MemberUseCase
+    private val memberRepository: MemberRepository
 ) : BaseViewModel<MemberViewState, MemberIntent, MemberAction>() {
     override val stateFlow: Flow<MemberViewState>
         get() = flowOf(MemberViewState.initial)
 
-    override fun processAction(action: MemberAction) {
+    override suspend fun processAction(action: MemberAction) {
         when (action) {
-            is MemberAction.LoadMemberAction -> memberUseCase.getFilteredMembers(action.phrase)
-            is MemberAction.OpenDialogAction -> memberUseCase.openDialog()
-            is MemberAction.DismissDialogAction -> memberUseCase.dismissDialog()
-            is MemberAction.AddMemberAction -> memberUseCase.addMember(
+            is MemberAction.LoadMemberAction -> memberRepository.getFilteredMembers(action.phrase)
+            is MemberAction.OpenDialogAction -> memberRepository.openDialog()
+            is MemberAction.DismissDialogAction -> memberRepository.dismissDialog()
+            is MemberAction.AddMemberAction -> memberRepository.addMember(
                 firstName = action.firstName,
                 middleName = action.middleName,
                 lastName = action.lastName

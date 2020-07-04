@@ -3,7 +3,6 @@ package com.leeloo.esist.db.dao
 import androidx.room.*
 import com.leeloo.esist.db.entity.MemberEntity
 import com.leeloo.esist.db.vo.RoomMemberDetails
-import com.leeloo.esist.vo.Member
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -18,7 +17,7 @@ interface MemberDao {
 
     @Transaction
     @Query("SELECT * from Members WHERE member_id = :memberId LIMIT 1")
-    fun getMemberDetails(memberId: Long): Flow<RoomMemberDetails>
+    fun getMemberDetails(memberId: Long): Flow<RoomMemberDetails?>
 
     @Query(
         "SELECT * from Members as AllMembers " +
@@ -27,7 +26,7 @@ interface MemberDao {
                 "WHERE CrossRef.group_id = :groupId AND GroupMembers.member_id IS NULL " +
                 "ORDER BY first_name, middle_name, last_name ASC"
     )
-    suspend fun getMembersNotInGroup(groupId: Long): List<Member>
+    suspend fun getMembersNotInGroup(groupId: Long): List<MemberEntity>
 
     @Insert
     suspend fun insertMember(member: MemberEntity): Long

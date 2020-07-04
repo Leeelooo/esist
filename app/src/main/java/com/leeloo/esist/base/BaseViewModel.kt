@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 abstract class BaseViewModel<VS : BaseViewState, I : BaseIntent<A>, A : BaseAction> : ViewModel() {
     protected abstract val stateFlow: Flow<VS>
 
-    protected abstract fun processAction(action: A)
+    protected abstract suspend fun processAction(action: A)
 
     fun viewStatesFlow(): Flow<VS> = stateFlow
 

@@ -8,7 +8,7 @@ import com.leeloo.esist.vo.Group
 
 @Entity(tableName = "Groups", indices = [Index(value = ["group_name"], unique = true)])
 data class GroupEntity(
-    @PrimaryKey @ColumnInfo(name = "group_id") val groupId: Long,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "group_id") val groupId: Long = 0L,
     @ColumnInfo(name = "group_name") val groupName: String,
     @ColumnInfo(name = "group_color") val groupColor: Int
 )

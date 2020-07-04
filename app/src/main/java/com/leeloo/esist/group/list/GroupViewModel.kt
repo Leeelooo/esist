@@ -6,17 +6,17 @@ import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class GroupViewModel @Inject constructor(
-    private val groupUseCase: GroupUseCase
+    private val groupRepository: GroupRepository
 ) : BaseViewModel<GroupViewState, GroupIntent, GroupAction>() {
     override val stateFlow: Flow<GroupViewState>
         get() = flowOf(GroupViewState.initial)
 
-    override fun processAction(action: GroupAction) {
+    override suspend fun processAction(action: GroupAction) {
         when (action) {
-            is GroupAction.LoadGroupsAction -> groupUseCase.getFilteredGroups(action.phrase)
-            is GroupAction.OpenDialogAction -> groupUseCase.openDialog()
-            is GroupAction.DismissDialogAction -> groupUseCase.dismissDialog()
-            is GroupAction.AddGroupAction -> groupUseCase.addGroup(action.groupName)
+            is GroupAction.LoadGroupsAction -> groupRepository.getFilteredGroups(action.phrase)
+            is GroupAction.OpenDialogAction -> groupRepository.openDialog()
+            is GroupAction.DismissDialogAction -> groupRepository.dismissDialog()
+            is GroupAction.AddGroupAction -> groupRepository.addGroup(action.groupName)
         }
     }
 

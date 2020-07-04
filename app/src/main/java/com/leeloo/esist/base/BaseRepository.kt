@@ -1,3 +1,7 @@
 package com.leeloo.esist.base
 
-interface BaseRepository
+import kotlinx.coroutines.flow.Flow
+
+interface BaseRepository<MS : BaseModelState<*>> {
+    fun modelStateFlow(): Flow<MS>
+}

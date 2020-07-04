@@ -26,7 +26,7 @@ interface LessonDao {
 
     @Transaction
     @Query("SELECT * FROM Lessons WHERE lesson_id = :lessonId LIMIT 1")
-    fun getLessonDetails(lessonId: Long): Flow<RoomLessonDetails>
+    fun getLessonDetails(lessonId: Long): Flow<RoomLessonDetails?>
 
     @Query(
         "SELECT * FROM Lessons as AllLessons " +

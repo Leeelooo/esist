@@ -4,7 +4,7 @@ import java.net.URI
 
 //TODO: members attendance infomation
 data class LessonDetails(
-    val lessonId: Long,
+    val lessonId: Long = 0L,
     val lessonSubject: String,
     val lessonTopic: String,
     val lessonHomework: String?,

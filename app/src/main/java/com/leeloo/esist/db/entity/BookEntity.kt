@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Books")
 data class BookEntity(
-    @PrimaryKey @ColumnInfo(name = "book_id") val bookId: Long,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "book_id") val bookId: Long = 0L,
     @ColumnInfo(name = "book_uri") val bookUri: String
 )

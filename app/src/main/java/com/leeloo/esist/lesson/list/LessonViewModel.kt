@@ -6,17 +6,17 @@ import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class LessonViewModel @Inject constructor(
-    private val lessonUseCase: LessonUseCase
+    private val lessonRepository: LessonRepository
 ) : BaseViewModel<LessonViewState, LessonIntent, LessonAction>() {
     override val stateFlow: Flow<LessonViewState>
         get() = flowOf(LessonViewState.initial)
 
-    override fun processAction(action: LessonAction) {
+    override suspend fun processAction(action: LessonAction) {
         when (action) {
-            is LessonAction.LoadLessonsAction -> lessonUseCase.getFilteredLessons(action.phrase)
-            is LessonAction.OpenDialogAction -> lessonUseCase.openDialog()
-            is LessonAction.DismissDialogAction -> lessonUseCase.dismissDialog()
-            is LessonAction.AddLessonAction -> lessonUseCase.addLesson(
+            is LessonAction.LoadLessonsAction -> lessonRepository.getFilteredLessons(action.phrase)
+            is LessonAction.OpenDialogAction -> lessonRepository.openDialog()
+            is LessonAction.DismissDialogAction -> lessonRepository.dismissDialog()
+            is LessonAction.AddLessonAction -> lessonRepository.addLesson(
                 subjectName = action.subjectName,
                 topicName = action.topicName,
                 startTime = action.startTime,

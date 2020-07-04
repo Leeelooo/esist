@@ -19,13 +19,15 @@ data class RoomGroupDetails(
         entityColumn = "lesson_id",
         associateBy = Junction(LessonGroupCrossRef::class)
     )
-    val lessons: List<RoomLesson>
+    val lessons: List<LessonEntity>
 )
 
-fun RoomGroupDetails.toGroupDetails(): GroupDetails = GroupDetails(
-    groupId = this.group.groupId,
-    groupName = this.group.groupName,
-    groupColor = this.group.groupColor,
-    groupMembers = this.members.map { it.toMember() },
-    groupSchedule = this.lessons.map { it.toLesson() }
-)
+fun RoomGroupDetails?.toGroupDetails(): GroupDetails? =
+    if (this == null) null
+    else GroupDetails(
+        groupId = this.group.groupId,
+        groupName = this.group.groupName,
+        groupColor = this.group.groupColor,
+        groupMembers = this.members.map { it.toMember() },
+        groupSchedule = this.lessons.map { it.toLesson() }
+    )

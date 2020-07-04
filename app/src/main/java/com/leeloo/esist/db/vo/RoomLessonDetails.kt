@@ -38,15 +38,17 @@ data class GroupWithMembers(
     val members: List<MemberEntity>
 )
 
-fun RoomLessonDetails.toLessonDetails(): LessonDetails = LessonDetails(
-    lessonId = this.lesson.lessonId,
-    lessonSubject = this.lesson.subjectName,
-    lessonTopic = this.lesson.topicName,
-    lessonHomework = this.lesson.homework,
-    lessonColor = this.lesson.lessonColor,
-    lessonTeacher = this.teacher.toMember(),
-    startTimestamp = this.lesson.startTime,
-    endTimestamp = this.lesson.finishTime,
-    lessonBooks = this.books.map { URI.create(it.bookUri) },
-    lessonGroups = this.groups.map { it.group.toGroup() }
-)
+fun RoomLessonDetails?.toLessonDetails(): LessonDetails? =
+    if (this == null) null
+    else LessonDetails(
+        lessonId = this.lesson.lessonId,
+        lessonSubject = this.lesson.subjectName,
+        lessonTopic = this.lesson.topicName,
+        lessonHomework = this.lesson.homework,
+        lessonColor = this.lesson.lessonColor,
+        lessonTeacher = this.teacher.toMember(),
+        startTimestamp = this.lesson.startTime,
+        endTimestamp = this.lesson.finishTime,
+        lessonBooks = this.books.map { URI.create(it.bookUri) },
+        lessonGroups = this.groups.map { it.group.toGroup() }
+    )
