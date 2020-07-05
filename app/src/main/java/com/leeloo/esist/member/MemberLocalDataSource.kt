@@ -1,20 +1,19 @@
 package com.leeloo.esist.member
 
 import com.leeloo.esist.base.BaseDataSource
+import com.leeloo.esist.db.dao.GroupDao
+import com.leeloo.esist.db.dao.LessonDao
 import com.leeloo.esist.db.dao.MemberDao
 import com.leeloo.esist.db.entity.toEntityMember
+import com.leeloo.esist.db.entity.toGroup
+import com.leeloo.esist.db.entity.toLesson
 import com.leeloo.esist.db.entity.toMember
-import com.leeloo.esist.db.vo.toMemberDetails
 import com.leeloo.esist.vo.Member
 import com.leeloo.esist.vo.MemberDetails
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 interface MemberLocalDataSource : BaseDataSource {
-    fun getFilteredMembersFlow(phrase: String): Flow<List<Member>>
-    fun getMemberDetailsFlow(memberId: Long): Flow<MemberDetails?>
+    suspend fun getFilteredMembersFlow(phrase: String): List<Member>
+    suspend fun getMemberDetails(memberId: Long): MemberDetails?
 
     suspend fun getGroupMembersToAdd(groupId: Long): List<Member>
 
@@ -22,18 +21,29 @@ interface MemberLocalDataSource : BaseDataSource {
     suspend fun createMembers(members: List<Member>): Boolean
 }
 
-class MemberLocalDataSourceImpl @Inject constructor(
-    private val memberDao: MemberDao
+class MemberLocalDataSourceImpl(
+    private val memberDao: MemberDao,
+    private val groupDao: GroupDao,
+    private val lessonDao: LessonDao
 ) : MemberLocalDataSource {
-    override fun getFilteredMembersFlow(phrase: String): Flow<List<Member>> =
-        memberDao.getFilteredMember(phrase)
-            .distinctUntilChanged()
-            .map { members -> members.map { it.toMember() } }
+    override suspend fun getFilteredMembersFlow(phrase: String): List<Member> =
+        memberDao.getFilteredMember(phrase).map { it.toMember() }
 
-    override fun getMemberDetailsFlow(memberId: Long): Flow<MemberDetails?> =
-        memberDao.getMemberDetails(memberId)
-            .distinctUntilChanged()
-            .map { it.toMemberDetails() }
+    override suspend fun getMemberDetails(memberId: Long): MemberDetails? {
+        val member = memberDao.getMemberDetails(memberId) ?: return null
+        val groups = groupDao.getMembersGroups(memberId)
+        val lessons = lessonDao.getGroupsLessons(groups.map { it.groupId })
+        return MemberDetails(
+            memberId = member.memberId,
+            emailAddress = member.emailAddress,
+            memberColor = member.memberColor,
+            lastName = member.lastName,
+            middleName = member.middleName,
+            firstName = member.firstName,
+            memberGroups = groups.map { it.toGroup() },
+            memberSchedule = lessons.map { it.toLesson() }
+        )
+    }
 
     override suspend fun getGroupMembersToAdd(groupId: Long): List<Member> =
         memberDao.getMembersNotInGroup(groupId).map { it.toMember() }

@@ -9,7 +9,6 @@ data class LessonDetails(
     val lessonTopic: String,
     val lessonHomework: String?,
     val lessonColor: LessonColor,
-    val lessonTeacher: Member,
     val startTimestamp: Long,
     val endTimestamp: Long,
     val lessonBooks: List<URI>,

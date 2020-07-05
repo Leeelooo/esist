@@ -6,14 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.leeloo.esist.R
-import dagger.android.AndroidInjector
-import dagger.android.HasAndroidInjector
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainFragment : Fragment(), HasAndroidInjector {
-
-    override fun androidInjector(): AndroidInjector<Any> {
-        TODO("Not yet implemented")
-    }
+@AndroidEntryPoint
+class MainFragment : Fragment() {
 
     override fun onCreateView(
             inflater: LayoutInflater,

@@ -7,13 +7,13 @@ import com.leeloo.esist.vo.Lesson
 
 @Entity(tableName = "Lessons")
 data class LessonEntity(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "lesson_id") val lessonId: Long = 0L,
-    @ColumnInfo(name = "subject_name") val subjectName: String,
-    @ColumnInfo(name = "topic_name") val topicName: String,
-    @ColumnInfo(name = "start_time") val startTime: Long,
-    @ColumnInfo(name = "finish_time") val finishTime: Long,
-    @ColumnInfo(name = "homework") val homework: String?,
-    @ColumnInfo(name = "lesson_color") val lessonColor: Int
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "lesson_id") var lessonId: Long = 0L,
+    @ColumnInfo(name = "subject_name") var subjectName: String = "",
+    @ColumnInfo(name = "topic_name") var topicName: String = "",
+    @ColumnInfo(name = "start_time") var startTime: Long = 0L,
+    @ColumnInfo(name = "finish_time") var finishTime: Long = 0L,
+    @ColumnInfo(name = "homework") var homework: String? = null,
+    @ColumnInfo(name = "lesson_color") var lessonColor: Int = 0
 )
 
 fun LessonEntity.toLesson(): Lesson = Lesson(

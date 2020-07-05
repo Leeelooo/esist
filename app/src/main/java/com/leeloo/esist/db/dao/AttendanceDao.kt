@@ -13,6 +13,6 @@ interface AttendanceDao {
     fun insertAttendance(attendance: AttendanceEntity): Long
 
     @Delete
-    fun removeAttendance(attendance: AttendanceEntity): Long
+    fun removeAttendance(attendance: AttendanceEntity): Int
 
 }

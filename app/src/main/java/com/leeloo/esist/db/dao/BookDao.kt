@@ -18,4 +18,11 @@ interface BookDao {
     @Query("SELECT * from Books")
     suspend fun getAllBooks(): List<BookEntity>
 
+    @Query(
+        "SELECT * from Books " +
+                "INNER JOIN LessonBookCrossRef ON LessonBookCrossRef.book_id = Books.book_id " +
+                "WHERE LessonBookCrossRef.lesson_id = :lessonId"
+    )
+    suspend fun getLessonBooks(lessonId: Long): List<BookEntity>
+
 }

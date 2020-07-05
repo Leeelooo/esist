@@ -6,11 +6,9 @@ import com.leeloo.esist.vo.Lesson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import javax.inject.Inject
 
 interface LessonRepository : BaseRepository<LessonModelState> {
-    fun getFilteredLessons(phrase: String)
+    suspend fun getFilteredLessons(phrase: String)
 
     fun openDialog()
     fun dismissDialog()
@@ -25,7 +23,7 @@ interface LessonRepository : BaseRepository<LessonModelState> {
 }
 
 @ExperimentalCoroutinesApi
-class LessonRepositoryImpl @Inject constructor(
+class LessonRepositoryImpl(
     private val lessonLocalDataSource: LessonLocalDataSource
 ) : LessonRepository {
     private val modelStateFlow: MutableStateFlow<LessonModelState> =
@@ -33,14 +31,10 @@ class LessonRepositoryImpl @Inject constructor(
 
     override fun modelStateFlow(): Flow<LessonModelState> = modelStateFlow
 
-    override fun getFilteredLessons(phrase: String) {
+    override suspend fun getFilteredLessons(phrase: String) {
         modelStateFlow.value = LessonModelState.Initial
-        modelStateFlow.combine(
-            lessonLocalDataSource
-                .getFilteredLessons(phrase)
-        ) { _, lessons ->
-            LessonModelState.LessonsLoaded(lessons)
-        }
+        modelStateFlow.value =
+            LessonModelState.LessonsLoaded(lessonLocalDataSource.getFilteredLessons(phrase))
     }
 
     override fun openDialog() {

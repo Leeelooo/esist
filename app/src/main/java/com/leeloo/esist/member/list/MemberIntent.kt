@@ -31,13 +31,15 @@ sealed class MemberIntent : BaseIntent<MemberAction> {
     class CreateGroupIntent(
         private val firstName: String,
         private val middleName: String?,
-        private val lastName: String
+        private val lastName: String,
+        private val emailAddress: String
     ) : MemberIntent() {
         override fun convertToAction(): MemberAction = MemberAction
             .AddMemberAction(
                 firstName = firstName,
                 middleName = middleName,
-                lastName = lastName
+                lastName = lastName,
+                emailAddress = emailAddress
             )
     }
 

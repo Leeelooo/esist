@@ -1,10 +1,12 @@
 package com.leeloo.esist.group.details
 
+import androidx.hilt.lifecycle.ViewModelInject
 import com.leeloo.esist.base.BaseViewModel
-import kotlinx.coroutines.flow.*
-import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 
-class GroupDetailsViewModel @Inject constructor(
+class GroupDetailsViewModel @ViewModelInject constructor(
     private val groupDetailsRepository: GroupDetailsRepository
 ) : BaseViewModel<GroupDetailsViewState, GroupDetailsIntent, GroupDetailsAction>() {
     override val stateFlow: Flow<GroupDetailsViewState>

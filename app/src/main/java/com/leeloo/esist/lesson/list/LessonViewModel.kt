@@ -1,11 +1,11 @@
 package com.leeloo.esist.lesson.list
 
+import androidx.hilt.lifecycle.ViewModelInject
 import com.leeloo.esist.base.BaseViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
 
-class LessonViewModel @Inject constructor(
+class LessonViewModel @ViewModelInject constructor(
     private val lessonRepository: LessonRepository
 ) : BaseViewModel<LessonViewState, LessonIntent, LessonAction>() {
     override val stateFlow: Flow<LessonViewState>

@@ -1,11 +1,11 @@
 package com.leeloo.esist.member.list
 
+import androidx.hilt.lifecycle.ViewModelInject
 import com.leeloo.esist.base.BaseViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
 
-class MemberViewModel @Inject constructor(
+class MemberViewModel @ViewModelInject constructor(
     private val memberRepository: MemberRepository
 ) : BaseViewModel<MemberViewState, MemberIntent, MemberAction>() {
     override val stateFlow: Flow<MemberViewState>
@@ -19,7 +19,8 @@ class MemberViewModel @Inject constructor(
             is MemberAction.AddMemberAction -> memberRepository.addMember(
                 firstName = action.firstName,
                 middleName = action.middleName,
-                lastName = action.lastName
+                lastName = action.lastName,
+                emailAddress = action.emailAddress
             )
         }
     }

@@ -6,11 +6,9 @@ import com.leeloo.esist.vo.Group
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import javax.inject.Inject
 
 interface GroupRepository : BaseRepository<GroupModelState> {
-    fun getFilteredGroups(phrase: String)
+    suspend fun getFilteredGroups(phrase: String)
 
     fun openDialog()
     fun dismissDialog()
@@ -19,7 +17,7 @@ interface GroupRepository : BaseRepository<GroupModelState> {
 }
 
 @ExperimentalCoroutinesApi
-class GroupRepositoryImpl @Inject constructor(
+class GroupRepositoryImpl(
     private val groupLocalDataSource: GroupLocalDataSource
 ) : GroupRepository {
     private val modelStateFlow: MutableStateFlow<GroupModelState> =
@@ -27,14 +25,10 @@ class GroupRepositoryImpl @Inject constructor(
 
     override fun modelStateFlow(): Flow<GroupModelState> = modelStateFlow
 
-    override fun getFilteredGroups(phrase: String) {
+    override suspend fun getFilteredGroups(phrase: String) {
         modelStateFlow.value = GroupModelState.Initial
-        modelStateFlow.combine(
-            groupLocalDataSource
-                .getFilteredGroupsFlow(phrase)
-        ) { _, groups ->
-            GroupModelState.GroupsLoaded(groups)
-        }
+        modelStateFlow.value =
+            GroupModelState.GroupsLoaded(groupLocalDataSource.getFilteredGroups(phrase))
     }
 
     override fun openDialog() {

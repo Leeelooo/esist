@@ -1,7 +1,8 @@
-package com.leeloo.esist
+package com.leeloo.esist.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.leeloo.esist.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

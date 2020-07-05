@@ -2,29 +2,41 @@ package com.leeloo.esist.db.dao
 
 import androidx.room.*
 import com.leeloo.esist.db.entity.GroupEntity
-import com.leeloo.esist.db.vo.RoomGroupDetails
-import com.leeloo.esist.vo.Group
-import com.leeloo.esist.vo.GroupDetails
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GroupDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertGroup(group: Group): Long
+    suspend fun insertGroup(group: GroupEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertGroups(groups: List<Group>): List<Long>
+    suspend fun insertGroups(groups: List<GroupEntity>): List<Long>
 
     @Query(
         "SELECT * from Groups " +
                 "WHERE group_name LIKE :phrase " +
-                "ORDER BY group_color ASC"
+                "ORDER BY group_name ASC"
     )
-    fun getFilteredGroups(phrase: String): Flow<List<GroupEntity>>
+    suspend fun getFilteredGroups(phrase: String): List<GroupEntity>
 
     @Transaction
     @Query("SELECT * from Groups WHERE group_id = :groupId LIMIT 1")
-    fun getGroupDetails(groupId: Long): Flow<RoomGroupDetails?>
+    suspend fun getGroupDetails(groupId: Long): GroupEntity?
+
+    @Query(
+        "SELECT * from Groups " +
+                "INNER JOIN LessonGroupCrossRef ON Groups.group_id = LessonGroupCrossRef.group_id " +
+                "WHERE LessonGroupCrossRef.lesson_id = :lessonId " +
+                "ORDER BY group_name ASC"
+    )
+    suspend fun getLessonGroups(lessonId: Long): List<GroupEntity>
+
+    @Query(
+        "SELECT * from Groups " +
+                "INNER JOIN GroupMemberCrossRef ON Groups.group_id = GroupMemberCrossRef.group_id " +
+                "WHERE GroupMemberCrossRef.member_id = :memberId " +
+                "ORDER BY group_name ASC"
+    )
+    suspend fun getMembersGroups(memberId: Long): List<GroupEntity>
 
 }

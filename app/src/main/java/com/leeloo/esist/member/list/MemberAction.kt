@@ -15,7 +15,8 @@ sealed class MemberAction : BaseAction {
     data class AddMemberAction(
         val firstName: String,
         val middleName: String?,
-        val lastName: String
+        val lastName: String,
+        val emailAddress: String
     ) : MemberAction()
 
 }

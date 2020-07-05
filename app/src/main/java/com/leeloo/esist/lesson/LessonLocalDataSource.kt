@@ -2,21 +2,20 @@ package com.leeloo.esist.lesson
 
 import com.leeloo.esist.base.BaseDataSource
 import com.leeloo.esist.db.dao.AttendanceDao
+import com.leeloo.esist.db.dao.BookDao
+import com.leeloo.esist.db.dao.GroupDao
 import com.leeloo.esist.db.dao.LessonDao
 import com.leeloo.esist.db.entity.AttendanceEntity
+import com.leeloo.esist.db.entity.toGroup
 import com.leeloo.esist.db.entity.toLesson
 import com.leeloo.esist.db.entity.toLessonEntity
-import com.leeloo.esist.db.vo.toLessonDetails
 import com.leeloo.esist.vo.Lesson
 import com.leeloo.esist.vo.LessonDetails
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import java.net.URI
 
 interface LessonLocalDataSource : BaseDataSource {
-    fun getFilteredLessons(phrase: String): Flow<List<Lesson>>
-    fun getLessonDetails(lessonId: Long): Flow<LessonDetails?>
+    suspend fun getFilteredLessons(phrase: String): List<Lesson>
+    suspend fun getLessonDetails(lessonId: Long): LessonDetails?
 
     suspend fun getGroupLessonsToAdd(groupId: Long): List<Lesson>
 
@@ -25,37 +24,53 @@ interface LessonLocalDataSource : BaseDataSource {
     suspend fun removeAttendance(lessonId: Long, memberId: Long): Boolean
 
     suspend fun createLesson(lesson: Lesson): Boolean
-    suspend fun createLessons(lessons: List<Lesson>): Boolean
 }
 
-class LessonLocalDataSourceImpl @Inject constructor(
+class LessonLocalDataSourceImpl(
     private val lessonDao: LessonDao,
+    private val bookDao: BookDao,
+    private val groupDao: GroupDao,
     private val attendanceDao: AttendanceDao
 ) : LessonLocalDataSource {
 
-    override fun getFilteredLessons(phrase: String): Flow<List<Lesson>> =
-        lessonDao.getFilteredLesson(phrase)
-            .distinctUntilChanged()
-            .map { entity -> entity.map { it.toLesson() } }
+    override suspend fun getFilteredLessons(phrase: String): List<Lesson> =
+        lessonDao.getFilteredLesson(phrase).map { it.toLesson() }
 
-    override fun getLessonDetails(lessonId: Long): Flow<LessonDetails?> =
-        lessonDao.getLessonDetails(lessonId)
-            .distinctUntilChanged()
-            .map { it.toLessonDetails() }
+    override suspend fun getLessonDetails(lessonId: Long): LessonDetails? {
+        val lesson = lessonDao.getLessonDetails(lessonId) ?: return null
+        return LessonDetails(
+            lessonId = lesson.lessonId,
+            lessonColor = lesson.lessonColor,
+            endTimestamp = lesson.finishTime,
+            startTimestamp = lesson.startTime,
+            lessonTopic = lesson.topicName,
+            lessonSubject = lesson.subjectName,
+            lessonHomework = lesson.homework,
+            lessonGroups = groupDao.getLessonGroups(lessonId).map { it.toGroup() },
+            lessonBooks = bookDao.getLessonBooks(lessonId).map { URI.create(it.bookUri) }
+        )
+    }
 
     override suspend fun getGroupLessonsToAdd(groupId: Long): List<Lesson> =
         lessonDao.getLessonsNotInGroup(groupId).map { it.toLesson() }
 
-    override suspend fun addAttendance(lessonId: Long, memberId: Long): Boolean = attendanceDao
-        .insertAttendance(AttendanceEntity(lessonId = lessonId, memberId = memberId)) != 0L
+    override suspend fun addAttendance(lessonId: Long, memberId: Long): Boolean =
+        attendanceDao.insertAttendance(
+            AttendanceEntity(
+                lessonId = lessonId,
+                memberId = memberId
+            )
+        ) != 0L
 
-    override suspend fun removeAttendance(lessonId: Long, memberId: Long): Boolean = attendanceDao
-        .removeAttendance(AttendanceEntity(lessonId = lessonId, memberId = memberId)) != 0L
+    override suspend fun removeAttendance(lessonId: Long, memberId: Long): Boolean =
+        attendanceDao.removeAttendance(
+            AttendanceEntity(
+                lessonId = lessonId,
+                memberId = memberId
+            )
+        ) != 0
 
     override suspend fun createLesson(lesson: Lesson): Boolean =
         lessonDao.insertLesson(lesson.toLessonEntity()) != 0L
-
-    override suspend fun createLessons(lessons: List<Lesson>): Boolean =
-        lessonDao.insertLessons(lessons.map { it.toLessonEntity() }).all { it != 0L }
 
 }

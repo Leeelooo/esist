@@ -7,11 +7,9 @@ import com.leeloo.esist.member.MemberLocalDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import javax.inject.Inject
 
 interface GroupDetailsRepository : BaseRepository<GroupDetailsModelState> {
-    fun getGroupDetails(groupId: Long)
+    suspend fun getGroupDetails(groupId: Long)
 
     fun openFabOptions()
     fun dismissDialog()
@@ -24,7 +22,7 @@ interface GroupDetailsRepository : BaseRepository<GroupDetailsModelState> {
 }
 
 @ExperimentalCoroutinesApi
-class GroupDetailsRepositoryImpl @Inject constructor(
+class GroupDetailsRepositoryImpl(
     private val groupLocalDataSource: GroupLocalDataSource,
     private val lessonLocalDataSource: LessonLocalDataSource,
     private val memberLocalDataSource: MemberLocalDataSource
@@ -34,18 +32,15 @@ class GroupDetailsRepositoryImpl @Inject constructor(
 
     override fun modelStateFlow(): Flow<GroupDetailsModelState> = modelStateFlow
 
-    override fun getGroupDetails(groupId: Long) {
+    override suspend fun getGroupDetails(groupId: Long) {
         modelStateFlow.value = GroupDetailsModelState.Loading
-        modelStateFlow.combine(
-            groupLocalDataSource
-                .getGroupDetailsFlow(groupId)
-        ) { _, groupDetails ->
+        val groupDetails = groupLocalDataSource.getGroupDetails(groupId)
+        modelStateFlow.value =
             if (groupDetails == null) {
                 GroupDetailsModelState.DetailsLoadingError(Exception("Error"))
             } else {
                 GroupDetailsModelState.LoadedDetails(groupDetails)
             }
-        }
     }
 
     override fun openFabOptions() {

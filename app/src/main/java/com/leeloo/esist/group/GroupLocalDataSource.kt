@@ -3,20 +3,15 @@ package com.leeloo.esist.group
 import com.leeloo.esist.base.BaseDataSource
 import com.leeloo.esist.db.dao.CrossRefDao
 import com.leeloo.esist.db.dao.GroupDao
-import com.leeloo.esist.db.entity.GroupMemberCrossRef
-import com.leeloo.esist.db.entity.LessonGroupCrossRef
-import com.leeloo.esist.db.entity.toGroup
-import com.leeloo.esist.db.vo.toGroupDetails
+import com.leeloo.esist.db.dao.LessonDao
+import com.leeloo.esist.db.dao.MemberDao
+import com.leeloo.esist.db.entity.*
 import com.leeloo.esist.vo.Group
 import com.leeloo.esist.vo.GroupDetails
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 interface GroupLocalDataSource : BaseDataSource {
-    fun getFilteredGroupsFlow(phrase: String): Flow<List<Group>>
-    fun getGroupDetailsFlow(groupId: Long): Flow<GroupDetails?>
+    suspend fun getFilteredGroups(phrase: String): List<Group>
+    suspend fun getGroupDetails(groupId: Long): GroupDetails?
 
     suspend fun getMemberGroupsToAdd(memberId: Long): List<Group>
 
@@ -26,23 +21,28 @@ interface GroupLocalDataSource : BaseDataSource {
     suspend fun addMembersToGroup(groupId: Long, memberIds: List<Long>): Boolean
 
     suspend fun createGroup(group: Group): Boolean
-    suspend fun createGroups(groups: List<Group>): Boolean
 }
 
-class GroupLocalDataSourceImpl @Inject constructor(
+class GroupLocalDataSourceImpl(
     private val groupDao: GroupDao,
+    private val lessonDao: LessonDao,
+    private val memberDao: MemberDao,
     private val crossRefDao: CrossRefDao
 ) : GroupLocalDataSource {
 
-    override fun getFilteredGroupsFlow(phrase: String): Flow<List<Group>> =
-        groupDao.getFilteredGroups(phrase)
-            .distinctUntilChanged()
-            .map { groups -> groups.map { it.toGroup() } }
+    override suspend fun getFilteredGroups(phrase: String): List<Group> =
+        groupDao.getFilteredGroups(phrase).map { it.toGroup() }
 
-    override fun getGroupDetailsFlow(groupId: Long): Flow<GroupDetails?> =
-        groupDao.getGroupDetails(groupId)
-            .distinctUntilChanged()
-            .map { it.toGroupDetails() }
+    override suspend fun getGroupDetails(groupId: Long): GroupDetails? {
+        val group = groupDao.getGroupDetails(groupId) ?: return null
+        return GroupDetails(
+            groupId = group.groupId,
+            groupName = group.groupName,
+            groupColor = group.groupColor,
+            groupSchedule = lessonDao.getGroupLessons(groupId).map { it.toLesson() },
+            groupMembers = memberDao.getGroupMembers(groupId).map { it.toMember() }
+        )
+    }
 
     override suspend fun getMemberGroupsToAdd(memberId: Long): List<Group> =
         throw UnsupportedOperationException("Don't need yet")
@@ -57,8 +57,13 @@ class GroupLocalDataSourceImpl @Inject constructor(
             )
         }.all { it != 0L }
 
-    override suspend fun addMemberToGroup(groupId: Long, memberId: Long): Boolean = crossRefDao
-        .insertGroupToMember(GroupMemberCrossRef(groupId = groupId, memberId = memberId)) != 0L
+    override suspend fun addMemberToGroup(groupId: Long, memberId: Long): Boolean =
+        crossRefDao.insertGroupToMember(
+            GroupMemberCrossRef(
+                groupId = groupId,
+                memberId = memberId
+            )
+        ) != 0L
 
     override suspend fun addMembersToGroup(groupId: Long, memberIds: List<Long>): Boolean =
         memberIds.map {
@@ -67,10 +72,7 @@ class GroupLocalDataSourceImpl @Inject constructor(
             )
         }.all { it != 0L }
 
-    override suspend fun createGroup(group: Group): Boolean = groupDao.insertGroup(group) != 0L
-
-    override suspend fun createGroups(groups: List<Group>): Boolean = groupDao
-        .insertGroups(groups)
-        .all { it != 0L }
+    override suspend fun createGroup(group: Group): Boolean =
+        groupDao.insertGroup(group.toEntityGroup()) != 0L
 
 }

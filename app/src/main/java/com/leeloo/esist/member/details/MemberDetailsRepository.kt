@@ -5,15 +5,13 @@ import com.leeloo.esist.member.MemberLocalDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import javax.inject.Inject
 
 interface MemberDetailsRepository : BaseRepository<MemberDetailsModelState> {
-    fun loadMemberDetails(memberId: Long)
+    suspend fun loadMemberDetails(memberId: Long)
 }
 
 @ExperimentalCoroutinesApi
-class MemberDetailsRepositoryImpl @Inject constructor(
+class MemberDetailsRepositoryImpl(
     private val memberLocalDataSource: MemberLocalDataSource
 ) : MemberDetailsRepository {
     private val modelStateFlow: MutableStateFlow<MemberDetailsModelState> =
@@ -21,17 +19,16 @@ class MemberDetailsRepositoryImpl @Inject constructor(
 
     override fun modelStateFlow(): Flow<MemberDetailsModelState> = modelStateFlow
 
-    override fun loadMemberDetails(memberId: Long) {
+    override suspend fun loadMemberDetails(memberId: Long) {
         modelStateFlow.value = MemberDetailsModelState.InitialLoading
-        modelStateFlow.combine(
-            memberLocalDataSource.getMemberDetailsFlow(memberId)
-        ) { _, memberDetails ->
+        val memberDetails = memberLocalDataSource.getMemberDetails(memberId)
+        modelStateFlow.value =
             if (memberDetails != null) {
                 MemberDetailsModelState.MemberDetailsLoaded(memberDetails)
             } else {
                 MemberDetailsModelState.MemberDetailsLoadingError(Exception("Error"))
             }
-        }
     }
+
 
 }

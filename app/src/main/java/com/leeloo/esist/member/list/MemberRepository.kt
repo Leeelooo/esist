@@ -6,10 +6,9 @@ import com.leeloo.esist.vo.Member
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import javax.inject.Inject
 
 interface MemberRepository : BaseRepository<MemberModelState> {
-    fun getFilteredMembers(phrase: String)
+    suspend fun getFilteredMembers(phrase: String)
 
     fun openDialog()
     fun dismissDialog()
@@ -23,7 +22,7 @@ interface MemberRepository : BaseRepository<MemberModelState> {
 }
 
 @ExperimentalCoroutinesApi
-class MemberRepositoryImpl @Inject constructor(
+class MemberRepositoryImpl(
     private val memberLocalDataSource: MemberLocalDataSource
 ) : MemberRepository {
     private val modelStateFlow: MutableStateFlow<MemberModelState> =
@@ -31,8 +30,10 @@ class MemberRepositoryImpl @Inject constructor(
 
     override fun modelStateFlow(): Flow<MemberModelState> = modelStateFlow
 
-    override fun getFilteredMembers(phrase: String) {
-        TODO("Not yet implemented")
+    override suspend fun getFilteredMembers(phrase: String) {
+        modelStateFlow.value = MemberModelState.Initial
+        modelStateFlow.value =
+            MemberModelState.MembersLoaded(memberLocalDataSource.getFilteredMembersFlow(phrase))
     }
 
     override fun openDialog() {
