@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="margin_default">16dp</dimen>
+    <dimen name="gutter_default">8dp</dimen>
+
+    <dimen name="item_default_corner_radius">16dp</dimen>
+
+    <dimen name="item_single_line_height">56dp</dimen>
+    <dimen name="item_member_icon_dimen">40dp</dimen>
+
+</resources>

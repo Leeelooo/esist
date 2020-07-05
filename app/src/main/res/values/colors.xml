@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#c7c7c7</color>
+    <color name="colorAccent">#000000</color>
+
+    <color name="colorPrimaryBackground">#ffffff</color>
+    <color name="colorPrimarySurface">#ffffff</color>
+    <color name="colorPrimaryError">#B00020</color>
+    <color name="colorOnPrimary">#000000</color>
+    <color name="colorOnPrimaryMedium">#99000000</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="colorOnBackground">#000000</color>
+    <color name="colorOnBackgroundMedium">#99000000</color>
+    <color name="colorOnSurface">#000000</color>
+    <color name="colorOnSurfaceMedium">#99000000</color>
+    <color name="colorOnError">#ffffff</color>
+    <color name="colorGrayOutline">#48000000</color>
+
+    <color name="colorPhotoBackground">#000000</color>
+    <color name="colorPhotoSystemUI">#20000000</color>
+    <color name="colorPhotoControls">#ffffff</color>
+    <color name="colorPhotoBottomSheet">#50000000</color>
+    <color name="colorLikeFilled">#f44336</color>
+
+    <color name="scrimEndGradient">#00000000</color>
+    <color name="scrimStartGradient">#50000000</color>
+    <color name="colorOnScrim">#ffffff</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="chipContainerStroke">#1f000000</color>
 </resources>

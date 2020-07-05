@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.EsistTheme.ErrorMessage" parent="TextAppearance.EsistTheme.Body1">
+        <item name="android:textColor">@color/colorOnPrimaryMedium</item>
+    </style>
+
+    <style name="TextAppearance.EsistTheme.ItemMemberName" parent="TextAppearance.EsistTheme.Subtitle1">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+    </style>
+
+</resources>
