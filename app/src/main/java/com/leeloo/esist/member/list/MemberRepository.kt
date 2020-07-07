@@ -1,66 +1,80 @@
 package com.leeloo.esist.member.list
 
 import com.leeloo.esist.base.BaseRepository
+import com.leeloo.esist.group.GroupLocalDataSource
 import com.leeloo.esist.member.MemberLocalDataSource
+import com.leeloo.esist.utils.getRandomColor
 import com.leeloo.esist.vo.Member
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface MemberRepository : BaseRepository<MemberModelState> {
-    suspend fun getFilteredMembers(phrase: String)
+    suspend fun getMembers()
 
-    fun openDialog()
+    suspend fun openDialog()
     fun dismissDialog()
+
+    suspend fun groupSelected(groupId: Long)
 
     suspend fun addMember(
         firstName: String,
-        middleName: String?,
         lastName: String,
-        emailAddress: String
+        emailAddress: String,
+        selectedGroups: List<Long>
     )
 }
 
 @ExperimentalCoroutinesApi
 class MemberRepositoryImpl(
-    private val memberLocalDataSource: MemberLocalDataSource
+    private val memberLocalDataSource: MemberLocalDataSource,
+    private val groupLocalDataSource: GroupLocalDataSource
 ) : MemberRepository {
     private val modelStateFlow: MutableStateFlow<MemberModelState> =
         MutableStateFlow(MemberModelState.Initial)
 
     override fun modelStateFlow(): Flow<MemberModelState> = modelStateFlow
 
-    override suspend fun getFilteredMembers(phrase: String) {
+    override suspend fun getMembers() {
         modelStateFlow.value = MemberModelState.Initial
         modelStateFlow.value =
-            MemberModelState.MembersLoaded(memberLocalDataSource.getFilteredMembersFlow(phrase))
+            MemberModelState.MembersLoaded(memberLocalDataSource.getAllMembers())
     }
 
-    override fun openDialog() {
-        modelStateFlow.value = MemberModelState.DialogOpen
+    override suspend fun openDialog() {
+        modelStateFlow.value = MemberModelState.DialogOpen(groupLocalDataSource.getGroups())
     }
 
     override fun dismissDialog() {
         modelStateFlow.value = MemberModelState.DialogDismiss
     }
 
+    override suspend fun groupSelected(groupId: Long) {
+        modelStateFlow.value = MemberModelState.GroupSelected(groupId)
+    }
+
     override suspend fun addMember(
         firstName: String,
-        middleName: String?,
         lastName: String,
-        emailAddress: String
+        emailAddress: String,
+        selectedGroups: List<Long>
     ) {
         val member = Member(
             firstName = firstName,
-            middleName = middleName,
             lastName = lastName,
             emailAddress = emailAddress,
-            memberColor = 0
-        )//TODO: generate color
-        if (memberLocalDataSource.createMember(member)) {
-            modelStateFlow.value = MemberModelState.MemberInserted
-        } else {
-            modelStateFlow.value = MemberModelState.MemberInsertionError(Exception("Error"))
+            memberColor = getRandomColor()
+        )
+        try {
+            if (memberLocalDataSource.createMember(member, selectedGroups)) {
+                modelStateFlow.value = MemberModelState.MemberInserted
+                modelStateFlow.value =
+                    MemberModelState.MembersLoaded(memberLocalDataSource.getAllMembers())
+            } else {
+                modelStateFlow.value = MemberModelState.MemberInsertionError(Exception("Error"))
+            }
+        } catch (e: Exception) {
+            modelStateFlow.value = MemberModelState.MemberInsertionError(e)
         }
     }
 

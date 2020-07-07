@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_member_layout"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/item_single_line_height">
+    android:layout_height="@dimen/item_single_line_height"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/item_member_icon"

@@ -4,4 +4,31 @@
     <string name="calendar_bottom_item">Calendar</string>
     <string name="groups_bottom_item">Groups</string>
     <string name="Lessons_bottom_item">Lessons</string>
+    <string name="item_loading_error_txt">Loading error</string>
+    <string name="item_loading_error_btntxt">Retry</string>
+    <string name="item_empty_txt">No entries =(</string>
+    <string name="search_hint">Search</string>
+    <string name="add_member_title">Add member</string>
+    <string name="add_member_first_name_hint">First name*</string>
+    <string name="add_member_email_address_hint">Email address*</string>
+    <string name="add_member_last_name_hint">Last name*</string>
+    <string name="bottom_add_create">Create</string>
+    <string name="bottom_add_group_title">Add group</string>
+    <string name="bottom_add_group_name_hint">Group name*</string>
+    <string name="add_bottom_lesson_title">Add lesson</string>
+    <string name="item_add_empty_text">Nothing to add</string>
+    <string name="bottom_add_member_add_groups_txt">Add member to groups</string>
+    <string name="bottom_add_subject_name">Subject name*</string>
+    <string name="bottom_add_lesson_topic">Lesson topic*</string>
+    <string name="bottom_add_book">Books</string>
+    <string name="bottom_add_homework">Homework</string>
+    <string name="bottom_add_members_to_group_txt">Add members to group</string>
+    <string name="bottom_add_lessons_group_txt">Add lessons to group</string>
+    <string name="input_error_empty">Field cannot be empty</string>
+    <string name="input_error_taken">Already taken</string>
+    <string name="bottom_add_set_date_btn">Set date</string>
+    <string name="bottom_add_set_start_btn">Set start time</string>
+    <string name="bottom_add_finish_time_btn">Set finish time</string>
+    <string name="bottom_add_time_na">N/A</string>
+    <string name="bottom_add_lessons_group">Add groups to lesson</string>
 </resources>

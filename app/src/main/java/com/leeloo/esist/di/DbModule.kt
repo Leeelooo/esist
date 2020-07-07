@@ -30,10 +30,6 @@ class DbModule {
 
     @Singleton
     @Provides
-    fun provideBookDao(db: EsistDatabase): BookDao = db.bookDao()
-
-    @Singleton
-    @Provides
     fun provideCrossRefDao(db: EsistDatabase): CrossRefDao = db.crossRefDao()
 
     @Singleton

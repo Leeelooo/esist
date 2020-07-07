@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/bottom_sheet_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_default"
+            android:text="@string/add_bottom_lesson_title"
+            android:textAppearance="@style/TextAppearance.EsistTheme.TextTitleBottomSheet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/subject_name_layout"
+            style="@style/EsistTheme.EditTextLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/subject_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/bottom_add_subject_name"
+                android:padding="@dimen/margin_default" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lesson_topic_layout"
+            style="@style/EsistTheme.EditTextLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/margin_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/subject_name_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/lesson_topic_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/bottom_add_lesson_topic"
+                android:padding="@dimen/margin_default" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/book_layout"
+            style="@style/EsistTheme.EditTextLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/margin_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/homework_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/book_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/bottom_add_book"
+                android:padding="@dimen/margin_default" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/homework_layout"
+            style="@style/EsistTheme.EditTextLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/margin_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lesson_topic_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/homework_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/bottom_add_homework"
+                android:padding="@dimen/margin_default" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/bottom_add_lessons_group"
+            android:textAppearance="@style/TextAppearance.EsistTheme.ItemMemberName"
+            app:layout_constraintStart_toStartOf="@+id/book_layout"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_add_finish_time_btn" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_add"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="76dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/EsistTheme.TextButton"
+            android:id="@+id/bottom_add_date_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/bottom_add_set_date_btn"
+            app:layout_constraintStart_toStartOf="@+id/book_layout"
+            app:layout_constraintTop_toBottomOf="@+id/book_layout" />
+
+        <TextView
+            android:id="@+id/date_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAlignment="viewEnd"
+            android:textAppearance="@style/TextAppearance.EsistTheme.ItemLessonBody"
+            app:layout_constraintBottom_toBottomOf="@+id/bottom_add_date_btn"
+            app:layout_constraintEnd_toEndOf="@+id/book_layout"
+            app:layout_constraintStart_toEndOf="@+id/bottom_add_date_btn"
+            app:layout_constraintTop_toTopOf="@+id/bottom_add_date_btn"
+            tools:text="Monday, May 5" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/EsistTheme.TextButton"
+            android:id="@+id/bottom_add_start_time_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/bottom_add_set_start_btn"
+            app:layout_constraintStart_toStartOf="@+id/bottom_add_date_btn"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_add_date_btn" />
+
+        <TextView
+            android:id="@+id/start_time_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAlignment="viewEnd"
+            android:textAppearance="@style/TextAppearance.EsistTheme.ItemLessonBody"
+            app:layout_constraintBottom_toBottomOf="@+id/bottom_add_start_time_btn"
+            app:layout_constraintEnd_toEndOf="@+id/date_text"
+            app:layout_constraintStart_toEndOf="@+id/bottom_add_start_time_btn"
+            app:layout_constraintTop_toTopOf="@+id/bottom_add_start_time_btn"
+            tools:text="13:30" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/EsistTheme.TextButton"
+            android:id="@+id/bottom_add_finish_time_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/bottom_add_finish_time_btn"
+            app:layout_constraintStart_toStartOf="@+id/bottom_add_start_time_btn"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_add_start_time_btn" />
+
+        <TextView
+            android:id="@+id/finish_time_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAlignment="viewEnd"
+            android:textAppearance="@style/TextAppearance.EsistTheme.ItemLessonBody"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="@+id/start_time_text"
+            app:layout_constraintStart_toEndOf="@+id/bottom_add_finish_time_btn"
+            app:layout_constraintTop_toTopOf="@+id/bottom_add_finish_time_btn"
+            tools:text="15:00" />
+
+        <FrameLayout
+            android:id="@+id/frameLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimaryBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_lesson_btn"
+                style="@style/EsistTheme.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/gutter_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_marginBottom="@dimen/gutter_default"
+                android:text="@string/bottom_add_create" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

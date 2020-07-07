@@ -30,4 +30,16 @@
     <color name="transparent">#00000000</color>
 
     <color name="chipContainerStroke">#1f000000</color>
+
+    <color name="red_500">#f44336</color>
+    <color name="purple_500">#9c27b0</color>
+    <color name="indigo_500">#3f51b5</color>
+    <color name="light_blue_500">#03a9f4</color>
+    <color name="teal_500">#009688</color>
+    <color name="green_500">#4caf50</color>
+    <color name="orange_500">#ff9800</color>
+
+    <color name="colorBackdrop">#fff2f3f5</color>
+    <color name="colorStroke">#ffe1e3e6</color>
+    
 </resources>

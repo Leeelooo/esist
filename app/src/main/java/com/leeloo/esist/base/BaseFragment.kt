@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-abstract class BaseView<VS : BaseViewState, I : BaseIntent<A>, A : BaseAction> : Fragment() {
+abstract class BaseFragment<VS : BaseViewState, I : BaseIntent<A>, A : BaseAction> : Fragment() {
     protected abstract val viewModel: BaseViewModel<VS, I, A>
     protected abstract val layoutResource: Int
     protected abstract val intentsFlow: Flow<I>
@@ -28,13 +28,13 @@ abstract class BaseView<VS : BaseViewState, I : BaseIntent<A>, A : BaseAction> :
         false
     )
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initViews()
+        viewModel.processIntents(intentsFlow)
         lifecycleScope.launch {
             viewModel.viewStatesFlow().collect { render(it) }
         }
-        viewModel.processIntents(intentsFlow)
     }
 
 }

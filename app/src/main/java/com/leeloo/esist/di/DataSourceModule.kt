@@ -37,14 +37,14 @@ class DataSourceModule {
     fun provideLessonLocalDataSource(
         lessonDao: LessonDao,
         groupDao: GroupDao,
-        bookDao: BookDao,
-        attendanceDao: AttendanceDao
+        attendanceDao: AttendanceDao,
+        crossRefDao: CrossRefDao
     ): LessonLocalDataSource =
         LessonLocalDataSourceImpl(
             lessonDao = lessonDao,
             groupDao = groupDao,
-            bookDao = bookDao,
-            attendanceDao = attendanceDao
+            attendanceDao = attendanceDao,
+            crossRefDao = crossRefDao
         )
 
     @Singleton
@@ -52,11 +52,13 @@ class DataSourceModule {
     fun provideMemberLocalDataSource(
         memberDao: MemberDao,
         groupDao: GroupDao,
-        lessonDao: LessonDao
+        lessonDao: LessonDao,
+        crossRefDao: CrossRefDao
     ): MemberLocalDataSource = MemberLocalDataSourceImpl(
         memberDao = memberDao,
         groupDao = groupDao,
-        lessonDao = lessonDao
+        lessonDao = lessonDao,
+        crossRefDao = crossRefDao
     )
 
 }

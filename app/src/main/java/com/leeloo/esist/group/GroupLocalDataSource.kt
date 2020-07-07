@@ -10,7 +10,7 @@ import com.leeloo.esist.vo.Group
 import com.leeloo.esist.vo.GroupDetails
 
 interface GroupLocalDataSource : BaseDataSource {
-    suspend fun getFilteredGroups(phrase: String): List<Group>
+    suspend fun getGroups(): List<Group>
     suspend fun getGroupDetails(groupId: Long): GroupDetails?
 
     suspend fun getMemberGroupsToAdd(memberId: Long): List<Group>
@@ -20,7 +20,11 @@ interface GroupLocalDataSource : BaseDataSource {
     suspend fun addMemberToGroup(groupId: Long, memberId: Long): Boolean
     suspend fun addMembersToGroup(groupId: Long, memberIds: List<Long>): Boolean
 
-    suspend fun createGroup(group: Group): Boolean
+    suspend fun createGroup(
+        group: Group,
+        selectedLessons: List<Long>,
+        selectedMembers: List<Long>
+    ): Boolean
 }
 
 class GroupLocalDataSourceImpl(
@@ -30,8 +34,8 @@ class GroupLocalDataSourceImpl(
     private val crossRefDao: CrossRefDao
 ) : GroupLocalDataSource {
 
-    override suspend fun getFilteredGroups(phrase: String): List<Group> =
-        groupDao.getFilteredGroups(phrase).map { it.toGroup() }
+    override suspend fun getGroups(): List<Group> =
+        groupDao.getGroups().map { it.toGroup() }
 
     override suspend fun getGroupDetails(groupId: Long): GroupDetails? {
         val group = groupDao.getGroupDetails(groupId) ?: return null
@@ -72,7 +76,20 @@ class GroupLocalDataSourceImpl(
             )
         }.all { it != 0L }
 
-    override suspend fun createGroup(group: Group): Boolean =
-        groupDao.insertGroup(group.toEntityGroup()) != 0L
+    override suspend fun createGroup(
+        group: Group,
+        selectedLessons: List<Long>,
+        selectedMembers: List<Long>
+    ): Boolean {
+        val groupId = groupDao.insertGroup(group.toEntityGroup())
+        if (groupId == 0L) return false
+        val addedLessons = selectedLessons.map {
+            crossRefDao.insertLessonToGroup(LessonGroupCrossRef(groupId = groupId, lessonId = it))
+        }.all { it != 0L }
+        val addedMembers = selectedMembers.map {
+            crossRefDao.insertGroupToMember(GroupMemberCrossRef(groupId = groupId, memberId = it))
+        }.all { it != 0L }
+        return addedLessons && addedMembers
+    }
 
 }

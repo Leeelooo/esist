@@ -1,7 +1,6 @@
 package com.leeloo.esist.lesson.details
 
 import com.leeloo.esist.base.BaseModelState
-import com.leeloo.esist.vo.Group
 import com.leeloo.esist.vo.LessonDetails
 
 sealed class LessonDetailsModelState : BaseModelState<LessonDetailsViewState> {

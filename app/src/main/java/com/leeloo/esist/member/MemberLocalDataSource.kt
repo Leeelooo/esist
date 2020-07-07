@@ -1,33 +1,35 @@
 package com.leeloo.esist.member
 
 import com.leeloo.esist.base.BaseDataSource
+import com.leeloo.esist.db.dao.CrossRefDao
 import com.leeloo.esist.db.dao.GroupDao
 import com.leeloo.esist.db.dao.LessonDao
 import com.leeloo.esist.db.dao.MemberDao
-import com.leeloo.esist.db.entity.toEntityMember
-import com.leeloo.esist.db.entity.toGroup
-import com.leeloo.esist.db.entity.toLesson
-import com.leeloo.esist.db.entity.toMember
+import com.leeloo.esist.db.entity.*
 import com.leeloo.esist.vo.Member
 import com.leeloo.esist.vo.MemberDetails
 
 interface MemberLocalDataSource : BaseDataSource {
-    suspend fun getFilteredMembersFlow(phrase: String): List<Member>
+    suspend fun getAllMembers(): List<Member>
     suspend fun getMemberDetails(memberId: Long): MemberDetails?
 
     suspend fun getGroupMembersToAdd(groupId: Long): List<Member>
 
-    suspend fun createMember(member: Member): Boolean
+    suspend fun createMember(
+        member: Member,
+        selectedGroups: List<Long>
+    ): Boolean
     suspend fun createMembers(members: List<Member>): Boolean
 }
 
 class MemberLocalDataSourceImpl(
     private val memberDao: MemberDao,
     private val groupDao: GroupDao,
-    private val lessonDao: LessonDao
+    private val lessonDao: LessonDao,
+    private val crossRefDao: CrossRefDao
 ) : MemberLocalDataSource {
-    override suspend fun getFilteredMembersFlow(phrase: String): List<Member> =
-        memberDao.getFilteredMember(phrase).map { it.toMember() }
+    override suspend fun getAllMembers(): List<Member> =
+        memberDao.getMembers().map { it.toMember() }
 
     override suspend fun getMemberDetails(memberId: Long): MemberDetails? {
         val member = memberDao.getMemberDetails(memberId) ?: return null
@@ -38,7 +40,6 @@ class MemberLocalDataSourceImpl(
             emailAddress = member.emailAddress,
             memberColor = member.memberColor,
             lastName = member.lastName,
-            middleName = member.middleName,
             firstName = member.firstName,
             memberGroups = groups.map { it.toGroup() },
             memberSchedule = lessons.map { it.toLesson() }
@@ -48,8 +49,16 @@ class MemberLocalDataSourceImpl(
     override suspend fun getGroupMembersToAdd(groupId: Long): List<Member> =
         memberDao.getMembersNotInGroup(groupId).map { it.toMember() }
 
-    override suspend fun createMember(member: Member): Boolean =
-        memberDao.insertMember(member.toEntityMember()) != 0L
+    override suspend fun createMember(
+        member: Member,
+        selectedGroups: List<Long>
+    ): Boolean {
+        val memberId: Long = memberDao.insertMember(member.toEntityMember())
+        if (memberId == 0L) return false
+        return selectedGroups.map {
+            crossRefDao.insertGroupToMember(GroupMemberCrossRef(groupId = it, memberId = memberId))
+        }.all { it != 0L }
+    }
 
     override suspend fun createMembers(members: List<Member>): Boolean =
         memberDao.insertMembers(members.map { it.toEntityMember() }).all { it != 0L }

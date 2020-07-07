@@ -7,10 +7,9 @@ import com.leeloo.esist.db.entity.LessonEntity
 interface LessonDao {
     @Query(
         "SELECT * FROM Lessons " +
-                "WHERE subject_name LIKE :phrase " +
                 "ORDER BY start_time ASC"
     )
-    suspend fun getFilteredLesson(phrase: String): List<LessonEntity>
+    suspend fun getLessons(): List<LessonEntity>
 
     @Query("SELECT * FROM Lessons WHERE lesson_id = :lessonId LIMIT 1")
     suspend fun getLessonDetails(lessonId: Long): LessonEntity?
@@ -42,9 +41,6 @@ interface LessonDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertLesson(lesson: LessonEntity): Long
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertLessons(lessons: List<LessonEntity>): List<Long>
 
     @Update
     suspend fun updateLesson(lesson: LessonEntity)

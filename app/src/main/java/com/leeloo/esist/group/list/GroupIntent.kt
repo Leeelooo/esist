@@ -5,19 +5,11 @@ import com.leeloo.esist.base.BaseIntent
 sealed class GroupIntent : BaseIntent<GroupAction> {
 
     object InitialIntent : GroupIntent() {
-        override fun convertToAction(): GroupAction = GroupAction.LoadGroupsAction("")
+        override fun convertToAction(): GroupAction = GroupAction.LoadGroupsAction
     }
 
-    class ReloadIntent(
-        private val phrase: String
-    ) : GroupIntent() {
-        override fun convertToAction(): GroupAction = GroupAction.LoadGroupsAction(phrase)
-    }
-
-    class ChangeFilterPhraseIntent(
-        private val phrase: String
-    ) : GroupIntent() {
-        override fun convertToAction(): GroupAction = GroupAction.LoadGroupsAction(phrase)
+    object ReloadIntent : GroupIntent() {
+        override fun convertToAction(): GroupAction = GroupAction.LoadGroupsAction
     }
 
     object OpenDialogIntent : GroupIntent() {
@@ -26,6 +18,18 @@ sealed class GroupIntent : BaseIntent<GroupAction> {
 
     object DismissDialogIntent : GroupIntent() {
         override fun convertToAction(): GroupAction = GroupAction.DismissDialogAction
+    }
+
+    class CheckMemberIntent(
+        private val memberId: Long
+    ) : GroupIntent() {
+        override fun convertToAction(): GroupAction = GroupAction.CheckMemberAction(memberId)
+    }
+
+    class CheckLessonIntent(
+        private val lessonId: Long
+    ) : GroupIntent() {
+        override fun convertToAction(): GroupAction = GroupAction.CheckLessonAction(lessonId)
     }
 
     class CreateGroupIntent(

@@ -3,13 +3,19 @@ package com.leeloo.esist.lesson.details
 import androidx.hilt.lifecycle.ViewModelInject
 import com.leeloo.esist.base.BaseViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 class LessonDetailsViewModel @ViewModelInject constructor(
     private val lessonDetailsRepository: LessonDetailsRepository
 ) : BaseViewModel<LessonDetailsViewState, LessonDetailsIntent, LessonDetailsAction>() {
+    private var lastState: LessonDetailsViewState = LessonDetailsViewState.loadingInitial
+
     override val stateFlow: Flow<LessonDetailsViewState>
-        get() = flowOf(LessonDetailsViewState.loadingInitial)
+        get() = lessonDetailsRepository.modelStateFlow().map {
+            val newState = it.reduce(lastState)
+            lastState = newState
+            newState
+        }
 
     override suspend fun processAction(action: LessonDetailsAction) {
         when (action) {

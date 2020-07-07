@@ -1,8 +1,5 @@
 package com.leeloo.esist.vo
 
-import java.net.URI
-
-//TODO: members attendance infomation
 data class LessonDetails(
     val lessonId: Long = 0L,
     val lessonSubject: String,
@@ -11,6 +8,6 @@ data class LessonDetails(
     val lessonColor: LessonColor,
     val startTimestamp: Long,
     val endTimestamp: Long,
-    val lessonBooks: List<URI>,
+    val lessonBook: String?,
     val lessonGroups: List<Group>
 )

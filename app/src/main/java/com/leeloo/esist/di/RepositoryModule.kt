@@ -43,8 +43,11 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideGroupRepository(
-        groupLocalDataSource: GroupLocalDataSource
-    ): GroupRepository = GroupRepositoryImpl(groupLocalDataSource)
+        groupLocalDataSource: GroupLocalDataSource,
+        memberLocalDataSource: MemberLocalDataSource,
+        lessonLocalDataSource: LessonLocalDataSource
+    ): GroupRepository =
+        GroupRepositoryImpl(groupLocalDataSource, memberLocalDataSource, lessonLocalDataSource)
 
     @Singleton
     @Provides
@@ -55,19 +58,22 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideLessonRepository(
-        lessonLocalDataSource: LessonLocalDataSource
-    ): LessonRepository = LessonRepositoryImpl(lessonLocalDataSource)
+        lessonLocalDataSource: LessonLocalDataSource,
+        groupLocalDataSource: GroupLocalDataSource
+    ): LessonRepository = LessonRepositoryImpl(lessonLocalDataSource, groupLocalDataSource)
 
     @Singleton
     @Provides
     fun provideMemberDetailsRepository(
         memberLocalDataSource: MemberLocalDataSource
-    ): MemberDetailsRepository = MemberDetailsRepositoryImpl(memberLocalDataSource)
+    ): MemberDetailsRepository =
+        MemberDetailsRepositoryImpl(memberLocalDataSource = memberLocalDataSource)
 
     @Singleton
     @Provides
     fun provideMemberRepository(
-        memberLocalDataSource: MemberLocalDataSource
-    ): MemberRepository = MemberRepositoryImpl(memberLocalDataSource)
+        memberLocalDataSource: MemberLocalDataSource,
+        groupLocalDataSource: GroupLocalDataSource
+    ): MemberRepository = MemberRepositoryImpl(memberLocalDataSource, groupLocalDataSource)
 
 }

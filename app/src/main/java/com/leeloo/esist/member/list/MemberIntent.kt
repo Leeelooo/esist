@@ -1,43 +1,40 @@
 package com.leeloo.esist.member.list
 
 import com.leeloo.esist.base.BaseIntent
+import com.leeloo.esist.vo.Group
 
 sealed class MemberIntent : BaseIntent<MemberAction> {
 
     object InitialIntent : MemberIntent() {
-        override fun convertToAction(): MemberAction = MemberAction.LoadMemberAction("")
+        override fun convertToAction(): MemberAction = MemberAction.LoadMemberAction
     }
 
-    class ReloadIntent(
-        private val phrase: String
-    ) : MemberIntent() {
-        override fun convertToAction(): MemberAction = MemberAction.LoadMemberAction(phrase)
-    }
-
-    class ChangeFilterPhraseIntent(
-        private val phrase: String
-    ) : MemberIntent() {
-        override fun convertToAction(): MemberAction = MemberAction.LoadMemberAction(phrase)
+    object ReloadIntent : MemberIntent() {
+        override fun convertToAction(): MemberAction = MemberAction.LoadMemberAction
     }
 
     object OpenDialogIntent : MemberIntent() {
         override fun convertToAction(): MemberAction = MemberAction.OpenDialogAction
     }
 
+    class OnGroupClick(
+        private val groupId: Long
+    ) : MemberIntent() {
+        override fun convertToAction(): MemberAction = MemberAction.GroupSelectedAction(groupId)
+    }
+
     object DismissDialogIntent : MemberIntent() {
         override fun convertToAction(): MemberAction = MemberAction.DismissDialogAction
     }
 
-    class CreateGroupIntent(
+    class CreateMemberIntent(
         private val firstName: String,
-        private val middleName: String?,
         private val lastName: String,
         private val emailAddress: String
     ) : MemberIntent() {
         override fun convertToAction(): MemberAction = MemberAction
             .AddMemberAction(
                 firstName = firstName,
-                middleName = middleName,
                 lastName = lastName,
                 emailAddress = emailAddress
             )

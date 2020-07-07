@@ -3,20 +3,19 @@ package com.leeloo.esist.group.details
 import androidx.hilt.lifecycle.ViewModelInject
 import com.leeloo.esist.base.BaseViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 class GroupDetailsViewModel @ViewModelInject constructor(
     private val groupDetailsRepository: GroupDetailsRepository
 ) : BaseViewModel<GroupDetailsViewState, GroupDetailsIntent, GroupDetailsAction>() {
-    override val stateFlow: Flow<GroupDetailsViewState>
-        get() = flowOf(GroupDetailsViewState.loadingInitial)
+    private var lastState: GroupDetailsViewState = GroupDetailsViewState.loadingInitial
 
-    init {
-        stateFlow.combine(groupDetailsRepository.modelStateFlow()) { oldViewState, modelState ->
-            modelState.reduce(oldViewState)
+    override val stateFlow: Flow<GroupDetailsViewState>
+        get() = groupDetailsRepository.modelStateFlow().map {
+            val newState = it.reduce(lastState)
+            lastState = newState
+            newState
         }
-    }
 
     override suspend fun processAction(action: GroupDetailsAction) {
         when (action) {

@@ -9,4 +9,17 @@
         <item name="android:textColor">@color/colorOnPrimary</item>
     </style>
 
+    <style name="TextAppearance.EsistTheme.MessageText" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@color/colorOnPrimaryMedium</item>
+    </style>
+
+    <style name="TextAppearance.EsistTheme.TextTitleBottomSheet" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.EsistTheme.ItemLessonBody" parent="TextAppearance.EsistTheme.Body1">
+        <item name="android:textColor">@color/colorOnPrimaryMedium</item>
+    </style>
+
 </resources>

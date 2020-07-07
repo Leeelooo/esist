@@ -1,6 +1,7 @@
 package com.leeloo.esist.lesson.list
 
 import com.leeloo.esist.base.BaseModelState
+import com.leeloo.esist.vo.Group
 import com.leeloo.esist.vo.Lesson
 
 sealed class LessonModelState : BaseModelState<LessonViewState> {
@@ -23,14 +24,33 @@ sealed class LessonModelState : BaseModelState<LessonViewState> {
             LessonViewState.loadedLessons(lessons)
     }
 
-    object DialogOpen : LessonModelState() {
+    class DialogOpen(
+        private val groups: List<Group>
+    ) : LessonModelState() {
         override fun reduce(oldState: LessonViewState): LessonViewState =
-            LessonViewState.openDialog(oldState.lessons)
+            LessonViewState.openDialog(oldState.lessons, groups)
     }
 
     object DialogDismiss : LessonModelState() {
         override fun reduce(oldState: LessonViewState): LessonViewState =
             LessonViewState.loadedLessons(oldState.lessons)
+    }
+
+    class GroupSelected(
+        private val groupId: Long
+    ) : LessonModelState() {
+        override fun reduce(oldState: LessonViewState): LessonViewState =
+            LessonViewState.groupSelected(
+                oldState.lessons,
+                oldState.groupToAdd,
+                oldState.selectedGroups.toMutableSet().apply {
+                    if (contains(groupId)) {
+                        remove(groupId)
+                    } else {
+                        add(groupId)
+                    }
+                }.toList()
+            )
     }
 
     object LessonInserted : LessonModelState() {
@@ -42,7 +62,12 @@ sealed class LessonModelState : BaseModelState<LessonViewState> {
         private val error: Throwable
     ) : LessonModelState() {
         override fun reduce(oldState: LessonViewState): LessonViewState =
-            LessonViewState.lessonInsertionError(oldState.lessons, error)
+            LessonViewState.lessonInsertionError(
+                oldState.lessons,
+                oldState.groupToAdd,
+                oldState.selectedGroups,
+                error
+            )
     }
 
 }

@@ -13,6 +13,7 @@ data class LessonEntity(
     @ColumnInfo(name = "start_time") var startTime: Long = 0L,
     @ColumnInfo(name = "finish_time") var finishTime: Long = 0L,
     @ColumnInfo(name = "homework") var homework: String? = null,
+    @ColumnInfo(name = "book") var book: String? = null,
     @ColumnInfo(name = "lesson_color") var lessonColor: Int = 0
 )
 
@@ -22,7 +23,8 @@ fun LessonEntity.toLesson(): Lesson = Lesson(
     lessonColor = this.lessonColor,
     startTimestamp = this.startTime,
     endTimestamp = this.finishTime,
-    homework = homework,
+    homework = this.homework,
+    book = this.book,
     lessonTopic = this.topicName
 )
 
@@ -33,5 +35,6 @@ fun Lesson.toLessonEntity(): LessonEntity = LessonEntity(
     lessonColor = this.lessonColor,
     startTime = this.startTimestamp,
     finishTime = this.endTimestamp,
-    homework = this.homework
+    homework = this.homework,
+    book = this.book
 )

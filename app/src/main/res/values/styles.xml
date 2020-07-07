@@ -1,6 +1,7 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="EsistTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowContentTransitions">true</item>
 
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -18,18 +19,7 @@
 
         <item name="bottomNavigationStyle">@style/EsistTheme.BottomNavigation</item>
 
-        <item name="colorControlNormal" tools:targetApi="M">
-            @color/colorOnPrimary
-        </item>
-        <item name="android:windowLightStatusBar" tools:targetApi="M">
-            true
-        </item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">
-            true
-        </item>
-        <item name="android:navigationBarColor" tools:targetApi="o_mr1">
-            @color/colorPrimaryBackground
-        </item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
     <style name="EsistTheme.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
@@ -37,8 +27,54 @@
         <item name="android:textAppearance">@style/TextAppearance.EsistTheme.Button</item>
     </style>
 
+    <style name="EsistTheme.TextInputEditText" parent="Widget.AppCompat.EditText">
+        <!-- Your edit text customization changes go here. -->
+    </style>
+
     <style name="EsistTheme.BottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
 
+    </style>
+
+    <style name="EsistTheme.PopupTheme" parent="ThemeOverlay.MaterialComponents.Light" />
+
+    <style name="EsistTheme.AppBar" parent="@style/Widget.Design.AppBarLayout">
+        <item name="popupTheme">@style/EsistTheme.PopupTheme</item>
+    </style>
+
+    <style name="EsistTheme.OverlayTextInputEditText" parent="ThemeOverlay.MaterialComponents.TextInputEditText">
+        <item name="editTextStyle">@style/EsistTheme.TextInputEditText</item>
+        <item name="colorControlActivated">@color/colorOnPrimary</item>
+    </style>
+
+    <style name="EsistTheme.EditTextLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="boxBackgroundColor">@color/colorBackdrop</item>
+        <item name="boxStrokeColor">@color/colorStroke</item>
+        <item name="hintEnabled">false</item>
+        <item name="shapeAppearance">@style/EsistTheme.EditLayoutShape</item>
+        <item name="materialThemeOverlay">@style/EsistTheme.OverlayTextInputEditText</item>
+    </style>
+
+    <style name="EsistTheme.EditLayoutShape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_dialog</item>
+    </style>
+
+    <style name="EsistTheme.Button" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textAppearance">@style/TextAppearance.EsistTheme.Button</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="strokeColor">@color/colorAccent</item>
     </style>
 
 </resources>

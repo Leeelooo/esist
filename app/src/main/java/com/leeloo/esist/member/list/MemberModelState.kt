@@ -1,6 +1,7 @@
 package com.leeloo.esist.member.list
 
 import com.leeloo.esist.base.BaseModelState
+import com.leeloo.esist.vo.Group
 import com.leeloo.esist.vo.Member
 
 sealed class MemberModelState : BaseModelState<MemberViewState> {
@@ -23,9 +24,28 @@ sealed class MemberModelState : BaseModelState<MemberViewState> {
             MemberViewState.loadedLessons(members)
     }
 
-    object DialogOpen : MemberModelState() {
+    class DialogOpen(
+        private val groups: List<Group>
+    ) : MemberModelState() {
         override fun reduce(oldState: MemberViewState): MemberViewState =
-            MemberViewState.openDialog(oldState.members)
+            MemberViewState.openDialog(oldState.members, groups)
+    }
+
+    class GroupSelected(
+        private val groupId: Long
+    ) : MemberModelState() {
+        override fun reduce(oldState: MemberViewState): MemberViewState =
+            MemberViewState.groupClicked(
+                oldState.members,
+                oldState.groupsToAdd,
+                oldState.selectedGroups.toMutableSet().apply {
+                    if (contains(groupId)) {
+                        remove(groupId)
+                    } else {
+                        add(groupId)
+                    }
+                }.toList()
+            )
     }
 
     object DialogDismiss : MemberModelState() {
@@ -42,7 +62,12 @@ sealed class MemberModelState : BaseModelState<MemberViewState> {
         private val error: Throwable
     ) : MemberModelState() {
         override fun reduce(oldState: MemberViewState): MemberViewState =
-            MemberViewState.lessonInsertionError(oldState.members, error)
+            MemberViewState.lessonInsertionError(
+                oldState.members,
+                oldState.groupsToAdd,
+                oldState.selectedGroups,
+                error
+            )
     }
 
 }

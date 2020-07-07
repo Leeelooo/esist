@@ -9,15 +9,11 @@ interface GroupDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertGroup(group: GroupEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertGroups(groups: List<GroupEntity>): List<Long>
-
     @Query(
         "SELECT * from Groups " +
-                "WHERE group_name LIKE :phrase " +
                 "ORDER BY group_name ASC"
     )
-    suspend fun getFilteredGroups(phrase: String): List<GroupEntity>
+    suspend fun getGroups(): List<GroupEntity>
 
     @Transaction
     @Query("SELECT * from Groups WHERE group_id = :groupId LIMIT 1")

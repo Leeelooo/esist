@@ -7,13 +7,11 @@ import com.leeloo.esist.db.entity.*
 
 @Database(
     entities = [
-        BookEntity::class,
         GroupEntity::class,
         LessonEntity::class,
         MemberEntity::class,
         GroupMemberCrossRef::class,
         LessonGroupCrossRef::class,
-        LessonBookCrossRef::class,
         AttendanceEntity::class
     ],
     version = 1,
@@ -21,7 +19,6 @@ import com.leeloo.esist.db.entity.*
 )
 abstract class EsistDatabase : RoomDatabase() {
     abstract fun attendanceDao(): AttendanceDao
-    abstract fun bookDao(): BookDao
     abstract fun crossRefDao(): CrossRefDao
     abstract fun groupDao(): GroupDao
     abstract fun lessonDao(): LessonDao

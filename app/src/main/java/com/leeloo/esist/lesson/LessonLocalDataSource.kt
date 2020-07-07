@@ -2,19 +2,15 @@ package com.leeloo.esist.lesson
 
 import com.leeloo.esist.base.BaseDataSource
 import com.leeloo.esist.db.dao.AttendanceDao
-import com.leeloo.esist.db.dao.BookDao
+import com.leeloo.esist.db.dao.CrossRefDao
 import com.leeloo.esist.db.dao.GroupDao
 import com.leeloo.esist.db.dao.LessonDao
-import com.leeloo.esist.db.entity.AttendanceEntity
-import com.leeloo.esist.db.entity.toGroup
-import com.leeloo.esist.db.entity.toLesson
-import com.leeloo.esist.db.entity.toLessonEntity
+import com.leeloo.esist.db.entity.*
 import com.leeloo.esist.vo.Lesson
 import com.leeloo.esist.vo.LessonDetails
-import java.net.URI
 
 interface LessonLocalDataSource : BaseDataSource {
-    suspend fun getFilteredLessons(phrase: String): List<Lesson>
+    suspend fun getLessons(): List<Lesson>
     suspend fun getLessonDetails(lessonId: Long): LessonDetails?
 
     suspend fun getGroupLessonsToAdd(groupId: Long): List<Lesson>
@@ -23,18 +19,21 @@ interface LessonLocalDataSource : BaseDataSource {
 
     suspend fun removeAttendance(lessonId: Long, memberId: Long): Boolean
 
-    suspend fun createLesson(lesson: Lesson): Boolean
+    suspend fun createLesson(
+        lesson: Lesson,
+        groups: List<Long>
+    ): Boolean
 }
 
 class LessonLocalDataSourceImpl(
     private val lessonDao: LessonDao,
-    private val bookDao: BookDao,
     private val groupDao: GroupDao,
-    private val attendanceDao: AttendanceDao
+    private val attendanceDao: AttendanceDao,
+    private val crossRefDao: CrossRefDao
 ) : LessonLocalDataSource {
 
-    override suspend fun getFilteredLessons(phrase: String): List<Lesson> =
-        lessonDao.getFilteredLesson(phrase).map { it.toLesson() }
+    override suspend fun getLessons(): List<Lesson> =
+        lessonDao.getLessons().map { it.toLesson() }
 
     override suspend fun getLessonDetails(lessonId: Long): LessonDetails? {
         val lesson = lessonDao.getLessonDetails(lessonId) ?: return null
@@ -47,7 +46,7 @@ class LessonLocalDataSourceImpl(
             lessonSubject = lesson.subjectName,
             lessonHomework = lesson.homework,
             lessonGroups = groupDao.getLessonGroups(lessonId).map { it.toGroup() },
-            lessonBooks = bookDao.getLessonBooks(lessonId).map { URI.create(it.bookUri) }
+            lessonBook = lesson.book
         )
     }
 
@@ -70,7 +69,15 @@ class LessonLocalDataSourceImpl(
             )
         ) != 0
 
-    override suspend fun createLesson(lesson: Lesson): Boolean =
-        lessonDao.insertLesson(lesson.toLessonEntity()) != 0L
+    override suspend fun createLesson(
+        lesson: Lesson,
+        groups: List<Long>
+    ): Boolean {
+        val lessonId: Long = lessonDao.insertLesson(lesson.toLessonEntity())
+        if (lessonId == 0L) return false
+        return groups.map {
+            crossRefDao.insertLessonToGroup(LessonGroupCrossRef(groupId = it, lessonId = lessonId))
+        }.all { it != 0L }
+    }
 
 }

@@ -5,19 +5,11 @@ import com.leeloo.esist.base.BaseIntent
 sealed class LessonIntent : BaseIntent<LessonAction> {
 
     object InitialIntent : LessonIntent() {
-        override fun convertToAction(): LessonAction = LessonAction.LoadLessonsAction("")
+        override fun convertToAction(): LessonAction = LessonAction.LoadLessonsAction
     }
 
-    class ReloadIntent(
-        private val phrase: String
-    ) : LessonIntent() {
-        override fun convertToAction(): LessonAction = LessonAction.LoadLessonsAction(phrase)
-    }
-
-    class ChangeFilterPhraseIntent(
-        private val phrase: String
-    ) : LessonIntent() {
-        override fun convertToAction(): LessonAction = LessonAction.LoadLessonsAction(phrase)
+    object ReloadIntent : LessonIntent() {
+        override fun convertToAction(): LessonAction = LessonAction.LoadLessonsAction
     }
 
     object OpenDialogIntent : LessonIntent() {
@@ -28,12 +20,19 @@ sealed class LessonIntent : BaseIntent<LessonAction> {
         override fun convertToAction(): LessonAction = LessonAction.DismissDialogAction
     }
 
+    class GroupToAddSelectedIntent(
+        private val groupId: Long
+    ) : LessonIntent() {
+        override fun convertToAction(): LessonAction = LessonAction.GroupToAddAction(groupId)
+    }
+
     class CreateGroupIntent(
         private val subjectName: String,
         private val topicName: String,
         private val startTime: Long,
         private val finishTime: Long,
-        private val homework: String?
+        private val homework: String?,
+        private val book: String?
     ) : LessonIntent() {
         override fun convertToAction(): LessonAction = LessonAction
             .AddLessonAction(
@@ -41,7 +40,8 @@ sealed class LessonIntent : BaseIntent<LessonAction> {
                 topicName = topicName,
                 startTime = startTime,
                 finishTime = finishTime,
-                homework = homework
+                homework = homework,
+                book = book
             )
     }
 

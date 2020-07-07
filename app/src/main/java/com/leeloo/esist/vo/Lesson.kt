@@ -7,5 +7,6 @@ data class Lesson(
     val lessonColor: LessonColor,
     val startTimestamp: Long,
     val endTimestamp: Long,
-    val homework: String?
+    val homework: String?,
+    val book: String?
 )

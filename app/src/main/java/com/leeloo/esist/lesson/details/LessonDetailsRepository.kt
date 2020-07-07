@@ -5,7 +5,6 @@ import com.leeloo.esist.lesson.LessonLocalDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 
 interface LessonDetailsRepository : BaseRepository<LessonDetailsModelState> {
     suspend fun loadLessonDetails(lessonId: Long)
