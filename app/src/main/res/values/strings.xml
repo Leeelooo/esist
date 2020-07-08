@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">esist</string>
+    <string name="app_name" translatable="false">esist</string>
     <string name="members_bottom_item">Members</string>
     <string name="calendar_bottom_item">Calendar</string>
     <string name="groups_bottom_item">Groups</string>

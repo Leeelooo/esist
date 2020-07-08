@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="members_bottom_item">Учащиеся</string>
+    <string name="calendar_bottom_item">Календарь</string>
+    <string name="groups_bottom_item">Группы</string>
+    <string name="Lessons_bottom_item">Занятия</string>
+    <string name="item_loading_error_txt">Ошибка загрузки</string>
+    <string name="item_loading_error_btntxt">Повторить</string>
+    <string name="item_empty_txt">Нет записей</string>
+    <string name="search_hint">Поиск</string>
+    <string name="add_member_title">Добавить учащегося</string>
+    <string name="add_member_first_name_hint">Имя*</string>
+    <string name="add_member_email_address_hint">Адрес почты*</string>
+    <string name="add_member_last_name_hint">Фамилия*</string>
+    <string name="bottom_add_create">Создать</string>
+    <string name="bottom_add_group_title">Добавить группу</string>
+    <string name="bottom_add_group_name_hint">Название группы*</string>
+    <string name="add_bottom_lesson_title">Добавить занятие</string>
+    <string name="item_add_empty_text">Нет записей</string>
+    <string name="bottom_add_member_add_groups_txt">Добавить пользователя в группы</string>
+    <string name="bottom_add_subject_name">Название предмета*</string>
+    <string name="bottom_add_lesson_topic">Название темы*</string>
+    <string name="bottom_add_book">Книги</string>
+    <string name="bottom_add_homework">Домашнее задание</string>
+    <string name="bottom_add_members_to_group_txt">Добавить пользователей в группу</string>
+    <string name="bottom_add_lessons_group_txt">Добавить занятия в группу</string>
+    <string name="input_error_empty">Пустое поле</string>
+    <string name="input_error_taken">Уже используется</string>
+    <string name="bottom_add_set_date_btn">Выбрать дату</string>
+    <string name="bottom_add_set_start_btn">Начало занятия</string>
+    <string name="bottom_add_finish_time_btn">Конец занятия</string>
+    <string name="bottom_add_time_na">Пусто</string>
+    <string name="bottom_add_lessons_group">Добавить группам занятие</string>
+    <string name="tab_member_title">Учащиеся</string>
+    <string name="tab_lessons_title">Занятия</string>
+    <string name="send_email">Отправить почту</string>
+    <string name="member_details_group_title">Часть групп:</string>
+    <string name="lesson_details_book">Книги:</string>
+    <string name="lesson_details_homework">Задание:</string>
+    <string name="lesson_details_subject">Предмет:</string>
+</resources>
