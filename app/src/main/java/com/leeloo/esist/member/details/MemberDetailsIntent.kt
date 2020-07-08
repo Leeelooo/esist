@@ -18,4 +18,20 @@ sealed class MemberDetailsIntent : BaseIntent<MemberDetailsAction> {
             MemberDetailsAction.LoadMemberDetailsAction(memberId)
     }
 
+    object InitialIntent : MemberDetailsIntent() {
+        override fun convertToAction(): MemberDetailsAction = MemberDetailsAction.InitialAction
+    }
+
+    class GetMemberStatisticIntent(
+        private val memberId: Long
+    ) : MemberDetailsIntent() {
+        override fun convertToAction(): MemberDetailsAction =
+            MemberDetailsAction.MemberStatisticAction(memberId)
+    }
+
+    object DismissIntent : MemberDetailsIntent() {
+        override fun convertToAction(): MemberDetailsAction =
+            MemberDetailsAction.DismissDialogAction
+    }
+
 }

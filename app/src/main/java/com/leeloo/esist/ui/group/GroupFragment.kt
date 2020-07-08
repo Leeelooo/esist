@@ -11,8 +11,10 @@ import com.leeloo.esist.group.list.GroupAction
 import com.leeloo.esist.group.list.GroupIntent
 import com.leeloo.esist.group.list.GroupViewModel
 import com.leeloo.esist.group.list.GroupViewState
+import com.leeloo.esist.ui.nav.Coordinator
+import com.leeloo.esist.ui.nav.CoordinatorImpl
 import com.leeloo.esist.ui.recycler.AddAdapter
-import com.leeloo.esist.ui.recycler.adapters.GroupAdapter
+import com.leeloo.esist.ui.recycler.adapters.GroupStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.bottom_add_group.*
 import kotlinx.android.synthetic.main.fragment_list.*
@@ -23,11 +25,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class GroupFragment : BaseFragment<GroupViewState, GroupIntent, GroupAction>() {
+    private lateinit var coordinator: Coordinator
     private val _viewModel: GroupViewModel by viewModels()
     private val _intents: MutableStateFlow<GroupIntent> =
         MutableStateFlow(GroupIntent.InitialIntent)
     private lateinit var bottomSheetDialog: BottomSheetDialog
-    private lateinit var adapter: GroupAdapter
+    private lateinit var adapter: GroupStateAdapter
     private lateinit var lessonAdapter: AddAdapter
     private lateinit var memberAdapter: AddAdapter
 
@@ -39,9 +42,10 @@ class GroupFragment : BaseFragment<GroupViewState, GroupIntent, GroupAction>() {
         get() = _intents
 
     override fun initViews() {
-        adapter = GroupAdapter(
+        coordinator = CoordinatorImpl(requireActivity().supportFragmentManager)
+        adapter = GroupStateAdapter(
             { _intents.value = GroupIntent.InitialIntent },
-            { view, groupdId -> }
+            { coordinator.navigateToGroupDetails(it) }
         )
         recycler.layoutManager = LinearLayoutManager(recycler.context)
         recycler.addItemDecoration(

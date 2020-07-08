@@ -38,13 +38,15 @@ class DataSourceModule {
         lessonDao: LessonDao,
         groupDao: GroupDao,
         attendanceDao: AttendanceDao,
-        crossRefDao: CrossRefDao
+        crossRefDao: CrossRefDao,
+        memberDao: MemberDao
     ): LessonLocalDataSource =
         LessonLocalDataSourceImpl(
             lessonDao = lessonDao,
             groupDao = groupDao,
             attendanceDao = attendanceDao,
-            crossRefDao = crossRefDao
+            crossRefDao = crossRefDao,
+            memberDao = memberDao
         )
 
     @Singleton

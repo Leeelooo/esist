@@ -2,9 +2,9 @@ package com.leeloo.esist.ui.recycler.vhs
 
 import android.view.View
 import com.leeloo.esist.vo.Group
-import kotlinx.android.synthetic.main.item_group.view.*
+import kotlinx.android.synthetic.main.item_add.view.*
 
-class GroupViewHolder(
+class MemberGroupViewHolder(
     private val view: View,
     private val onClick: (Long) -> Unit
 ) : DataViewHolder<Group>(view) {
@@ -16,7 +16,7 @@ class GroupViewHolder(
 
     override fun bindData(data: Group) {
         this.data = data
-        view.item_group_name.text = data.groupName
+        view.chip.text = data.groupName
     }
 
 }

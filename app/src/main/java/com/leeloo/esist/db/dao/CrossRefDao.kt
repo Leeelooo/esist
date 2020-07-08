@@ -3,6 +3,7 @@ package com.leeloo.esist.db.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.leeloo.esist.db.entity.GroupMemberCrossRef
 import com.leeloo.esist.db.entity.LessonGroupCrossRef
 

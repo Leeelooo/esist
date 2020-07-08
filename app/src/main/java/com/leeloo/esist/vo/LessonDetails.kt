@@ -9,5 +9,6 @@ data class LessonDetails(
     val startTimestamp: Long,
     val endTimestamp: Long,
     val lessonBook: String?,
-    val lessonGroups: List<Group>
+    val lessonMembers: List<Member>,
+    val checkedMembers: List<Member>
 )

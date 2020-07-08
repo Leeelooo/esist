@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.fragment_main.*
 @AndroidEntryPoint
 class MainFragment : Fragment() {
     private lateinit var bottomNavigationView: BottomNavigationView
-    private var isInitialSelection = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,10 +32,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bottomNavigationView = bottom_navigation
         bottomNavigationView.setOnNavigationItemSelectedListener {
-            if (!isInitialSelection && it.itemId == bottomNavigationView.selectedItemId) {
-                return@setOnNavigationItemSelectedListener false
-            }
-            isInitialSelection = false
+            LAST_ITEM = it.itemId
             when (it.itemId) {
                 R.id.bottom_navigation_item_members -> {
                     parentFragmentManager.beginTransaction()
@@ -67,10 +63,9 @@ class MainFragment : Fragment() {
                 }
             }
         }
-        if (savedInstanceState == null){
-            isInitialSelection = true
-            bottomNavigationView.selectedItemId = R.id.bottom_navigation_item_members
-        }
+        bottomNavigationView.selectedItemId = LAST_ITEM
     }
-
+    companion object {
+        var LAST_ITEM: Int = R.id.bottom_navigation_item_members
+    }
 }

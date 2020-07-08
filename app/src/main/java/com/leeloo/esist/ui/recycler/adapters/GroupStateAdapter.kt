@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.leeloo.esist.R
-import com.leeloo.esist.ui.recycler.BaseAdapter
+import com.leeloo.esist.ui.recycler.BaseStateAdapter
 import com.leeloo.esist.ui.recycler.vhs.GroupViewHolder
 import com.leeloo.esist.vo.Group
 
-class GroupAdapter(
+class GroupStateAdapter(
     onRetry: () -> Unit,
-    private val onCLick: (View, Long) -> Unit
-) : BaseAdapter<Group, GroupViewHolder>(onRetry) {
+    private val onCLick: (Long) -> Unit
+) : BaseStateAdapter<Group, GroupViewHolder>(onRetry) {
 
     override fun getDataViewHolder(inflater: LayoutInflater, parent: ViewGroup): GroupViewHolder =
         GroupViewHolder(

@@ -4,6 +4,10 @@ import com.leeloo.esist.base.BaseIntent
 
 sealed class LessonDetailsIntent : BaseIntent<LessonDetailsAction> {
 
+    object InitialIntent : LessonDetailsIntent() {
+        override fun convertToAction(): LessonDetailsAction = LessonDetailsAction.InitialAction
+    }
+
     class LoadLessonDetailsIntent(
         private val lessonId: Long
     ) : LessonDetailsIntent() {

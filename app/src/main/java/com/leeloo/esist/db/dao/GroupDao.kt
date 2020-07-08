@@ -28,10 +28,7 @@ interface GroupDao {
     suspend fun getLessonGroups(lessonId: Long): List<GroupEntity>
 
     @Query(
-        "SELECT * from Groups " +
-                "INNER JOIN GroupMemberCrossRef ON Groups.group_id = GroupMemberCrossRef.group_id " +
-                "WHERE GroupMemberCrossRef.member_id = :memberId " +
-                "ORDER BY group_name ASC"
+        "SELECT * from Groups INNER JOIN GroupMemberCrossRef ON Groups.group_id = GroupMemberCrossRef.group_id WHERE member_id = :memberId ORDER BY group_name ASC"
     )
     suspend fun getMembersGroups(memberId: Long): List<GroupEntity>
 

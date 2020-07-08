@@ -10,6 +10,7 @@ interface LessonDetailsRepository : BaseRepository<LessonDetailsModelState> {
     suspend fun loadLessonDetails(lessonId: Long)
     suspend fun setAttendance(lessonId: Long, memberId: Long)
     suspend fun removeAttendance(lessonId: Long, memberId: Long)
+    fun initial()
 }
 
 @ExperimentalCoroutinesApi
@@ -38,6 +39,10 @@ class LessonDetailsRepositoryImpl(
 
     override suspend fun removeAttendance(lessonId: Long, memberId: Long) {
         lessonLocalDataSource.removeAttendance(lessonId, memberId)
+    }
+
+    override fun initial() {
+        modelStateFlow.value = LessonDetailsModelState.InitialLoading
     }
 
 

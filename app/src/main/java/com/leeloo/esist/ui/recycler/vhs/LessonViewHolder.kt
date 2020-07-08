@@ -7,12 +7,12 @@ import kotlinx.android.synthetic.main.item_lesson.view.*
 
 class LessonViewHolder(
     private val view: View,
-    private val onClick: (View, Long) -> Unit
+    private val onClick: (Long) -> Unit
 ) : DataViewHolder<Lesson>(view) {
     private lateinit var data: Lesson
 
     init {
-        view.setOnClickListener { onClick(it, data.lessonId) }
+        view.setOnClickListener { onClick(data.lessonId) }
     }
 
     override fun bindData(data: Lesson) {

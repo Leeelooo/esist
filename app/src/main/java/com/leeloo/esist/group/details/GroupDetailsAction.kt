@@ -12,6 +12,8 @@ sealed class GroupDetailsAction : BaseAction {
 
     object DialogDismissAction : GroupDetailsAction()
 
+    object InitialIntent : GroupDetailsAction()
+
     data class LoadMembersToAddAction(
         val groupId: Long
     ) : GroupDetailsAction()

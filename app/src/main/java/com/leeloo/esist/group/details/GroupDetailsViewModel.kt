@@ -19,6 +19,8 @@ class GroupDetailsViewModel @ViewModelInject constructor(
 
     override suspend fun processAction(action: GroupDetailsAction) {
         when (action) {
+            is GroupDetailsAction.InitialIntent ->
+                groupDetailsRepository.initial()
             is GroupDetailsAction.LoadGroupDetailsAction ->
                 groupDetailsRepository.getGroupDetails(action.groupId)
             is GroupDetailsAction.FabClickAction ->

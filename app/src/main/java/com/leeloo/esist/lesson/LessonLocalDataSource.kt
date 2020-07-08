@@ -1,10 +1,7 @@
 package com.leeloo.esist.lesson
 
 import com.leeloo.esist.base.BaseDataSource
-import com.leeloo.esist.db.dao.AttendanceDao
-import com.leeloo.esist.db.dao.CrossRefDao
-import com.leeloo.esist.db.dao.GroupDao
-import com.leeloo.esist.db.dao.LessonDao
+import com.leeloo.esist.db.dao.*
 import com.leeloo.esist.db.entity.*
 import com.leeloo.esist.vo.Lesson
 import com.leeloo.esist.vo.LessonDetails
@@ -29,6 +26,7 @@ class LessonLocalDataSourceImpl(
     private val lessonDao: LessonDao,
     private val groupDao: GroupDao,
     private val attendanceDao: AttendanceDao,
+    private val memberDao: MemberDao,
     private val crossRefDao: CrossRefDao
 ) : LessonLocalDataSource {
 
@@ -37,6 +35,7 @@ class LessonLocalDataSourceImpl(
 
     override suspend fun getLessonDetails(lessonId: Long): LessonDetails? {
         val lesson = lessonDao.getLessonDetails(lessonId) ?: return null
+        val groups = groupDao.getLessonGroups(lessonId)
         return LessonDetails(
             lessonId = lesson.lessonId,
             lessonColor = lesson.lessonColor,
@@ -45,7 +44,9 @@ class LessonLocalDataSourceImpl(
             lessonTopic = lesson.topicName,
             lessonSubject = lesson.subjectName,
             lessonHomework = lesson.homework,
-            lessonGroups = groupDao.getLessonGroups(lessonId).map { it.toGroup() },
+            lessonMembers = memberDao.getGroupsMembers(groups.map { it.groupId })
+                .map { it.toMember() },
+            checkedMembers = attendanceDao.getVisitedMembers(lessonId).map { it.toMember() },
             lessonBook = lesson.book
         )
     }
@@ -62,12 +63,12 @@ class LessonLocalDataSourceImpl(
         ) != 0L
 
     override suspend fun removeAttendance(lessonId: Long, memberId: Long): Boolean =
-        attendanceDao.removeAttendance(
-            AttendanceEntity(
+        true.also {
+            attendanceDao.removeAttendance(
                 lessonId = lessonId,
                 memberId = memberId
             )
-        ) != 0
+        }
 
     override suspend fun createLesson(
         lesson: Lesson,

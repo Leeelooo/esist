@@ -1,6 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/back_arrow"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:elevation="16dp"
+        android:src="@drawable/ic_circled_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/member_statistic"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_info_teal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/member_icon"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_arrow"
+        tools:src="@drawable/ic_member_circle" />
+
+    <TextView
+        android:id="@+id/member_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:singleLine="true"
+        android:textAlignment="viewEnd"
+        android:textAppearance="@style/TextAppearance.EsistTheme.MemberTitle"
+        app:layout_constraintBottom_toTopOf="@+id/member_email"
+        app:layout_constraintEnd_toStartOf="@+id/member_icon"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/member_icon"
+        tools:text="Anton Gorin" />
+
+    <TextView
+        android:id="@+id/member_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.EsistTheme.MemberEmail"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/member_icon"
+        app:layout_constraintEnd_toEndOf="@+id/member_name"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/member_name"
+        app:layout_constraintTop_toBottomOf="@+id/member_name"
+        tools:text="leeeloooda@gmail.com" />
+
+    <TextView
+        android:id="@+id/member_groups_title"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginStart="16dp"
+        android:textAppearance="@style/TextAppearance.EsistTheme.MemberBody"
+        app:layout_constraintBottom_toBottomOf="@+id/member_groups"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/member_groups"
+        android:text="@string/member_details_group_title" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/member_groups"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/member_groups_title"
+        app:layout_constraintTop_toBottomOf="@+id/member_icon"
+        tools:orientation="horizontal"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_add" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/member_schedule"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/member_groups"
+        tools:listitem="@layout/item_lesson"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

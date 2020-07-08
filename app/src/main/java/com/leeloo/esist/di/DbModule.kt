@@ -22,7 +22,7 @@ class DbModule {
             context.applicationContext,
             EsistDatabase::class.java,
             "esist.db"
-        ).build()
+        ).allowMainThreadQueries().build()
 
     @Singleton
     @Provides

@@ -4,7 +4,12 @@ import com.leeloo.esist.base.BaseIntent
 
 sealed class GroupDetailsIntent : BaseIntent<GroupDetailsAction> {
 
-    class InitialIntent(
+    object InitialIntent : GroupDetailsIntent() {
+        override fun convertToAction(): GroupDetailsAction =
+            GroupDetailsAction.InitialIntent
+    }
+
+    class GroupDetailsLoading(
         private val groupId: Long
     ) : GroupDetailsIntent() {
         override fun convertToAction(): GroupDetailsAction =

@@ -11,8 +11,10 @@ import com.leeloo.esist.member.list.MemberAction
 import com.leeloo.esist.member.list.MemberIntent
 import com.leeloo.esist.member.list.MemberViewModel
 import com.leeloo.esist.member.list.MemberViewState
+import com.leeloo.esist.ui.nav.Coordinator
+import com.leeloo.esist.ui.nav.CoordinatorImpl
 import com.leeloo.esist.ui.recycler.AddAdapter
-import com.leeloo.esist.ui.recycler.adapters.MemberAdapter
+import com.leeloo.esist.ui.recycler.adapters.MemberStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.bottom_add_member.*
 import kotlinx.android.synthetic.main.fragment_list.*
@@ -23,11 +25,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MemberFragment : BaseFragment<MemberViewState, MemberIntent, MemberAction>() {
+    private lateinit var coordinator: Coordinator
     private val _viewModel: MemberViewModel by viewModels()
     private val _intents: MutableStateFlow<MemberIntent> =
         MutableStateFlow(MemberIntent.InitialIntent)
     private lateinit var bottomSheetDialog: BottomSheetDialog
-    private lateinit var adapter: MemberAdapter
+    private lateinit var adapter: MemberStateAdapter
     private lateinit var addAdapter: AddAdapter
 
     override val viewModel: BaseViewModel<MemberViewState, MemberIntent, MemberAction>
@@ -38,9 +41,10 @@ class MemberFragment : BaseFragment<MemberViewState, MemberIntent, MemberAction>
         get() = _intents
 
     override fun initViews() {
-        adapter = MemberAdapter(
+        coordinator = CoordinatorImpl(requireActivity().supportFragmentManager)
+        adapter = MemberStateAdapter(
             { _intents.value = MemberIntent.ReloadIntent },
-            { groupdId -> }
+            { coordinator.navigateToMemberDetails(it) }
         )
         recycler.layoutManager = LinearLayoutManager(recycler.context)
         recycler.addItemDecoration(

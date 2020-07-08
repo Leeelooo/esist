@@ -25,6 +25,8 @@ class LessonDetailsViewModel @ViewModelInject constructor(
                 lessonDetailsRepository.setAttendance(action.lessonId, action.memberId)
             is LessonDetailsAction.RemoveAttendanceAction ->
                 lessonDetailsRepository.removeAttendance(action.lessonId, action.memberId)
+            is LessonDetailsAction.InitialAction ->
+                lessonDetailsRepository.initial()
         }
     }
 

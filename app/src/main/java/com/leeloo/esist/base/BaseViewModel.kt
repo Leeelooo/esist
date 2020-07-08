@@ -16,7 +16,8 @@ abstract class BaseViewModel<VS : BaseViewState, I : BaseIntent<A>, A : BaseActi
 
     fun processIntents(intents: Flow<I>) {
         viewModelScope.launch {
-            intents.map { it.convertToAction() }
+            intents
+                .map { it.convertToAction() }
                 .collect { processAction(it) }
         }
     }
