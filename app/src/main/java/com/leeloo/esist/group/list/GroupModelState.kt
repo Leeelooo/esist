@@ -81,7 +81,7 @@ sealed class GroupModelState : BaseModelState<GroupViewState> {
             GroupViewState.groupInserted(oldState.groups)
     }
 
-    class GroupInsetionError(
+    class GroupInsertionError(
         private val error: Throwable
     ) : GroupModelState() {
         override fun reduce(oldState: GroupViewState): GroupViewState =

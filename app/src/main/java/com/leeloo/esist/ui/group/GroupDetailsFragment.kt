@@ -2,7 +2,9 @@ package com.leeloo.esist.ui.group
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.PagerAdapter
 import com.leeloo.esist.R
@@ -16,6 +18,7 @@ import com.leeloo.esist.ui.nav.Coordinator
 import com.leeloo.esist.ui.nav.CoordinatorImpl
 import com.leeloo.esist.ui.recycler.adapters.LessonStateAdapter
 import com.leeloo.esist.ui.recycler.adapters.MemberStateAdapter
+import com.leeloo.esist.ui.recycler.decor.LessonItemDecorator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_group_details.*
 import kotlinx.coroutines.flow.Flow
@@ -62,9 +65,16 @@ class GroupDetailsFragment :
         members_recycler.layoutManager = LinearLayoutManager(requireContext())
         lessons_recycler.adapter = lessonAdapter
         lessons_recycler.layoutManager = LinearLayoutManager(requireContext())
+        lessons_recycler.addItemDecoration(LessonItemDecorator(resources.getDimensionPixelSize(R.dimen.margin_default)))
+        members_recycler.addItemDecoration(
+            DividerItemDecoration(
+                members_recycler.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         back_arrow.setOnClickListener { coordinator.popBackStack() }
         group_statistic.setOnClickListener {
-
+            _intents.value = GroupDetailsIntent.CheckStatisticIntent(groupId)
         }
 //        add_fab.setOnClickListener {
 //
@@ -85,6 +95,13 @@ class GroupDetailsFragment :
                 isError = false,
                 isLoading = false
             )
+            if (viewState.attendance != null) {
+                Toast.makeText(
+                    context,
+                    viewState.attendance.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

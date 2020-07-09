@@ -32,4 +32,6 @@ sealed class GroupDetailsAction : BaseAction {
         val lessonId: Long
     ) : GroupDetailsAction()
 
+    data class StatisticAction(val groupId: Long) : GroupDetailsAction()
+
 }

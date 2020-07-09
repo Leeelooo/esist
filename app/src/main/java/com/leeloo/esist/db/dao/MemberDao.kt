@@ -50,4 +50,5 @@ interface MemberDao {
     @Insert
     suspend fun insertMembers(members: List<MemberEntity>): List<Long>
 
+
 }

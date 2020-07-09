@@ -32,4 +32,28 @@ interface GroupDao {
     )
     suspend fun getMembersGroups(memberId: Long): List<GroupEntity>
 
+    @Query(
+        "SELECT COUNT(Members.member_id) FROM Members " +
+                "INNER JOIN GroupMemberCrossRef ON GroupMemberCrossRef.member_id = Members.member_id " +
+                "INNER JOIN Groups ON Groups.group_id = GroupMemberCrossRef.group_id " +
+                "WHERE Groups.group_id = :groupId"
+    )
+    suspend fun getGroupMemberCount(groupId: Long): Int
+
+    @Query(
+        "SELECT COUNT(AttendanceEntity.member_id) FROM AttendanceEntity " +
+                "INNER JOIN Lessons ON Lessons.lesson_id = AttendanceEntity.lesson_id " +
+                "INNER JOIN LessonGroupCrossRef ON LessonGroupCrossRef.lesson_id = Lessons.lesson_id " +
+                "INNER JOIN Groups ON Groups.group_id = LessonGroupCrossRef.group_id " +
+                "WHERE GROUPS.group_id = :groupId"
+    )
+    suspend fun getGroupAttendance(groupId: Long): Int
+
+    @Query(
+        "SELECT COUNT(LessonGroupCrossRef.lesson_id) FROM LessonGroupCrossRef " +
+                "INNER JOIN Groups ON Groups.group_id = LessonGroupCrossRef.group_id " +
+                "WHERE GROUPS.group_id = :groupId"
+    )
+    suspend fun getLessonsCount(groupId: Long): Int
+
 }

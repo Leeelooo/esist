@@ -1,7 +1,9 @@
 package com.leeloo.esist.ui.lesson
 
+import android.text.format.DateUtils
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.leeloo.esist.R
 import com.leeloo.esist.base.BaseFragment
@@ -15,6 +17,7 @@ import com.leeloo.esist.ui.nav.CoordinatorImpl
 import com.leeloo.esist.ui.recycler.adapters.LessonAttendanceAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_lesson_details.*
+import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_member_details.back_arrow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,10 +61,30 @@ class LessonDetailsFragment :
         )
         lesson_attendance.adapter = adapter
         lesson_attendance.layoutManager = LinearLayoutManager(requireContext())
+        lesson_attendance.addItemDecoration(
+            DividerItemDecoration(
+                lesson_attendance.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
     }
 
     override fun render(viewState: LessonDetailsViewState) {
         if (viewState.lessonDetails != null && view != null) {
+            lesson_date.text = DateUtils.formatDateTime(
+                context,
+                viewState.lessonDetails.startTimestamp,
+                DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY
+            )
+            lesson_time.text = "${DateUtils.formatDateTime(
+                context,
+                viewState.lessonDetails.startTimestamp,
+                DateUtils.FORMAT_SHOW_TIME
+            )} - ${DateUtils.formatDateTime(
+                context,
+                viewState.lessonDetails.endTimestamp,
+                DateUtils.FORMAT_SHOW_TIME
+            )}"
             lesson_subject.text = viewState.lessonDetails.lessonSubject
             lesson_topic.text = viewState.lessonDetails.lessonTopic
             if (viewState.lessonDetails.lessonBook == null || viewState.lessonDetails.lessonBook.isEmpty()) {

@@ -1,9 +1,7 @@
 package com.leeloo.esist.group.details
 
 import com.leeloo.esist.base.BaseModelState
-import com.leeloo.esist.vo.GroupDetails
-import com.leeloo.esist.vo.Lesson
-import com.leeloo.esist.vo.Member
+import com.leeloo.esist.vo.*
 
 sealed class GroupDetailsModelState : BaseModelState<GroupDetailsViewState> {
 
@@ -72,6 +70,13 @@ sealed class GroupDetailsModelState : BaseModelState<GroupDetailsViewState> {
     ) : GroupDetailsModelState() {
         override fun reduce(oldState: GroupDetailsViewState): GroupDetailsViewState =
             GroupDetailsViewState.lessonsLoadingFailed(oldState.group, lessonsLoadingError)
+    }
+
+    class AttendanceLoaded(
+        private val attendance: Attendance
+    ) : GroupDetailsModelState() {
+        override fun reduce(oldState: GroupDetailsViewState): GroupDetailsViewState =
+            GroupDetailsViewState.showAttendance(oldState.group, attendance)
     }
 
 }

@@ -10,7 +10,8 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_member" />
+        tools:listitem="@layout/item_member"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_fab"
@@ -20,6 +21,7 @@
         android:layout_margin="@dimen/margin_default"
         android:src="@drawable/ic_add"
         app:backgroundTint="@color/teal_500"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

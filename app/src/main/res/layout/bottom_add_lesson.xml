@@ -132,12 +132,13 @@
             tools:listitem="@layout/item_add" />
 
         <com.google.android.material.button.MaterialButton
-            style="@style/EsistTheme.TextButton"
+            style="@style/EsistTheme.Button"
             android:id="@+id/bottom_add_date_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/bottom_add_set_date_btn"
+            app:strokeWidth="1dp"
             app:layout_constraintStart_toStartOf="@+id/book_layout"
             app:layout_constraintTop_toBottomOf="@+id/book_layout" />
 
@@ -155,12 +156,13 @@
             tools:text="Monday, May 5" />
 
         <com.google.android.material.button.MaterialButton
-            style="@style/EsistTheme.TextButton"
+            style="@style/EsistTheme.Button"
             android:id="@+id/bottom_add_start_time_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/bottom_add_set_start_btn"
+            app:strokeWidth="1dp"
             app:layout_constraintStart_toStartOf="@+id/bottom_add_date_btn"
             app:layout_constraintTop_toBottomOf="@+id/bottom_add_date_btn" />
 
@@ -178,12 +180,13 @@
             tools:text="13:30" />
 
         <com.google.android.material.button.MaterialButton
-            style="@style/EsistTheme.TextButton"
+            style="@style/EsistTheme.Button"
             android:id="@+id/bottom_add_finish_time_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/bottom_add_finish_time_btn"
+            app:strokeWidth="1dp"
             app:layout_constraintStart_toStartOf="@+id/bottom_add_start_time_btn"
             app:layout_constraintTop_toBottomOf="@+id/bottom_add_start_time_btn" />
 

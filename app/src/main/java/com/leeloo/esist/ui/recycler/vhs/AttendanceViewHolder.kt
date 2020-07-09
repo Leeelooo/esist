@@ -20,22 +20,15 @@ class AttendanceViewHolder(
         view.setOnClickListener {
             onClick(data.memberId)
         }
-        view.set_attendance.setOnClickListener { onSetAttendance(data.memberId) }
-        view.remove_attendance.setOnClickListener { onRemoveAttendance(data.memberId) }
+        view.checkbox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) onSetAttendance(data.memberId)
+            else onRemoveAttendance(data.memberId)
+        }
     }
 
     fun bind(data: Member, isChecked: Boolean) {
         this.data = data
-        view.set_attendance.isEnabled = !isChecked
-        view.remove_attendance.isEnabled = isChecked
-        view.set_attendance.isChecked = isChecked
-        view.remove_attendance.isChecked = !isChecked
-        view.member_attendance_group.addOnButtonCheckedListener { group, checkedId, isCheck ->
-            if (isCheck) {
-                view.set_attendance.isEnabled = checkedId != R.id.set_attendance
-                view.remove_attendance.isEnabled = checkedId == R.id.set_attendance
-            }
-        }
+        view.checkbox.isChecked = isChecked
         view.item_member_name.text = "${data.firstName} ${data.lastName}"
         view.item_member_icon.setImageDrawable(
             ContextCompat.getDrawable(

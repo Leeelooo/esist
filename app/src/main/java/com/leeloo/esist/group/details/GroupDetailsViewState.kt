@@ -1,6 +1,7 @@
 package com.leeloo.esist.group.details
 
 import com.leeloo.esist.base.BaseViewState
+import com.leeloo.esist.vo.Attendance
 import com.leeloo.esist.vo.GroupDetails
 import com.leeloo.esist.vo.Lesson
 import com.leeloo.esist.vo.Member
@@ -15,7 +16,8 @@ data class GroupDetailsViewState(
     val membersLoadingError: Throwable?,
     val lessonsLoading: Boolean,
     val lessonsToAdd: List<Lesson>,
-    val lessonsLoadingError: Throwable?
+    val lessonsLoadingError: Throwable?,
+    val attendance: Attendance?
 ) : BaseViewState {
     companion object {
         val loadingInitial: GroupDetailsViewState
@@ -29,7 +31,8 @@ data class GroupDetailsViewState(
                 membersLoadingError = null,
                 lessonsLoading = false,
                 lessonsToAdd = emptyList(),
-                lessonsLoadingError = null
+                lessonsLoadingError = null,
+                attendance = null
             )
 
         fun loadedDetails(
@@ -44,7 +47,8 @@ data class GroupDetailsViewState(
             membersLoadingError = null,
             lessonsLoading = false,
             lessonsToAdd = emptyList(),
-            lessonsLoadingError = null
+            lessonsLoadingError = null,
+            attendance = null
         )
 
         fun loadedDetailsFailed(
@@ -59,7 +63,8 @@ data class GroupDetailsViewState(
             membersLoadingError = null,
             lessonsLoading = false,
             lessonsToAdd = emptyList(),
-            lessonsLoadingError = null
+            lessonsLoadingError = null,
+            attendance = null
         )
 
         fun changeFabState(
@@ -75,7 +80,8 @@ data class GroupDetailsViewState(
             membersLoadingError = null,
             lessonsLoading = false,
             lessonsToAdd = emptyList(),
-            lessonsLoadingError = null
+            lessonsLoadingError = null,
+            attendance = null
         )
 
         fun loadingMembersToAdd(
@@ -90,7 +96,8 @@ data class GroupDetailsViewState(
             membersLoadingError = null,
             lessonsLoading = false,
             lessonsToAdd = emptyList(),
-            lessonsLoadingError = null
+            lessonsLoadingError = null,
+            attendance = null
         )
 
         fun loadedMembersToAdd(
@@ -106,7 +113,8 @@ data class GroupDetailsViewState(
             membersLoadingError = null,
             lessonsLoading = false,
             lessonsToAdd = emptyList(),
-            lessonsLoadingError = null
+            lessonsLoadingError = null,
+            attendance = null
         )
 
         fun membersLoadingFailed(
@@ -122,7 +130,8 @@ data class GroupDetailsViewState(
             membersLoadingError = membersLoadingError,
             lessonsLoading = false,
             lessonsToAdd = emptyList(),
-            lessonsLoadingError = null
+            lessonsLoadingError = null,
+            attendance = null
         )
 
         fun loadingLessonsToAdd(
@@ -137,7 +146,8 @@ data class GroupDetailsViewState(
             membersLoadingError = null,
             lessonsLoading = true,
             lessonsToAdd = emptyList(),
-            lessonsLoadingError = null
+            lessonsLoadingError = null,
+            attendance = null
         )
 
         fun loadedLessonsToAdd(
@@ -153,7 +163,8 @@ data class GroupDetailsViewState(
             membersLoadingError = null,
             lessonsLoading = false,
             lessonsToAdd = lessonsToAdd,
-            lessonsLoadingError = null
+            lessonsLoadingError = null,
+            attendance = null
         )
 
         fun lessonsLoadingFailed(
@@ -169,7 +180,25 @@ data class GroupDetailsViewState(
             membersLoadingError = null,
             lessonsLoading = false,
             lessonsToAdd = emptyList(),
-            lessonsLoadingError = lessonsLoadingError
+            lessonsLoadingError = lessonsLoadingError,
+            attendance = null
+        )
+
+        fun showAttendance(
+            group: GroupDetails?,
+            attendance: Attendance?
+        ): GroupDetailsViewState = GroupDetailsViewState(
+            loading = false,
+            group = group,
+            error = null,
+            isFabOpened = false,
+            membersLoading = false,
+            membersToAdd = emptyList(),
+            membersLoadingError = null,
+            lessonsLoading = false,
+            lessonsToAdd = emptyList(),
+            lessonsLoadingError = null,
+            attendance = attendance
         )
 
     }

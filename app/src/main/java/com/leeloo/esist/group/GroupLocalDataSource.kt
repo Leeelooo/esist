@@ -6,6 +6,7 @@ import com.leeloo.esist.db.dao.GroupDao
 import com.leeloo.esist.db.dao.LessonDao
 import com.leeloo.esist.db.dao.MemberDao
 import com.leeloo.esist.db.entity.*
+import com.leeloo.esist.vo.Attendance
 import com.leeloo.esist.vo.Group
 import com.leeloo.esist.vo.GroupDetails
 
@@ -25,6 +26,8 @@ interface GroupLocalDataSource : BaseDataSource {
         selectedLessons: List<Long>,
         selectedMembers: List<Long>
     ): Boolean
+
+    suspend fun getAttendance(groupId: Long): Attendance
 }
 
 class GroupLocalDataSourceImpl(
@@ -90,6 +93,12 @@ class GroupLocalDataSourceImpl(
             crossRefDao.insertGroupToMember(GroupMemberCrossRef(groupId = groupId, memberId = it))
         }.all { it != 0L }
         return addedLessons && addedMembers
+    }
+
+    override suspend fun getAttendance(groupId: Long): Attendance {
+        val memberCount = groupDao.getGroupMemberCount(groupId) * groupDao.getLessonsCount(groupId)
+        val attendanceCount = groupDao.getGroupAttendance(groupId)
+        return Attendance(expectedAttendance = memberCount, actualAttendance = attendanceCount)
     }
 
 }

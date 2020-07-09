@@ -81,10 +81,10 @@ class GroupRepositoryImpl(
                     GroupModelState.GroupsLoaded(groupLocalDataSource.getGroups())
             } else {
 
-                modelStateFlow.value = GroupModelState.GroupInsetionError(Exception("Error"))
+                modelStateFlow.value = GroupModelState.GroupInsertionError(Exception("Error"))
             }
         } catch (e: Exception) {
-            GroupModelState.GroupInsetionError(e)
+            GroupModelState.GroupInsertionError(e)
         }
     }
 

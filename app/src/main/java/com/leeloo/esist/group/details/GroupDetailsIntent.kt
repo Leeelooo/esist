@@ -77,4 +77,11 @@ sealed class GroupDetailsIntent : BaseIntent<GroupDetailsAction> {
             GroupDetailsAction.ChooseLessonToAdd(groupId, lessonId)
     }
 
+    class CheckStatisticIntent(
+        private val groupId: Long
+    ) : GroupDetailsIntent() {
+        override fun convertToAction(): GroupDetailsAction =
+            GroupDetailsAction.StatisticAction(groupId)
+    }
+
 }

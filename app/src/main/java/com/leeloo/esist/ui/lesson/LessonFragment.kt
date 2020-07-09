@@ -20,6 +20,7 @@ import com.leeloo.esist.ui.nav.Coordinator
 import com.leeloo.esist.ui.nav.CoordinatorImpl
 import com.leeloo.esist.ui.recycler.AddAdapter
 import com.leeloo.esist.ui.recycler.adapters.LessonStateAdapter
+import com.leeloo.esist.ui.recycler.decor.LessonItemDecorator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.bottom_add_lesson.*
 import kotlinx.android.synthetic.main.fragment_list.*
@@ -60,6 +61,7 @@ class LessonFragment : BaseFragment<LessonViewState, LessonIntent, LessonAction>
             { coordinator.navigateToLessonDetails(it) }
         )
         recycler.layoutManager = LinearLayoutManager(recycler.context)
+        recycler.addItemDecoration(LessonItemDecorator(resources.getDimensionPixelSize(R.dimen.margin_default)))
         recycler.adapter = adapter
         add_fab.setOnClickListener { _intents.value = LessonIntent.OpenDialogIntent }
 

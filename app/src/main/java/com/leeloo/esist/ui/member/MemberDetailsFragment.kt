@@ -1,6 +1,7 @@
 package com.leeloo.esist.ui.member
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -18,6 +19,7 @@ import com.leeloo.esist.ui.nav.Coordinator
 import com.leeloo.esist.ui.nav.CoordinatorImpl
 import com.leeloo.esist.ui.recycler.adapters.MemberGroupsAdapter
 import com.leeloo.esist.ui.recycler.adapters.MemberLessonAdapter
+import com.leeloo.esist.ui.recycler.decor.LessonItemDecorator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_member_details.*
@@ -63,9 +65,12 @@ class MemberDetailsFragment :
             _intents.value = MemberDetailsIntent.GetMemberStatisticIntent(memberId)
         }
         member_email.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/html"
-            intent.putExtra(Intent.EXTRA_EMAIL, member_email.text)
+            val intent = Intent(
+                Intent.ACTION_SENDTO,
+                Uri.fromParts("mailto", member_email.text.toString(), null)
+            )
+            intent.putExtra(Intent.EXTRA_SUBJECT, "")
+            intent.putExtra(Intent.EXTRA_TEXT, "")
             startActivity(Intent.createChooser(intent, resources.getString(R.string.send_email)))
         }
         groupAdapter = MemberGroupsAdapter { coordinator.navigateToGroupDetails(it) }
@@ -75,6 +80,7 @@ class MemberDetailsFragment :
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         member_schedule.adapter = lessonAdapter
         member_schedule.layoutManager = LinearLayoutManager(context)
+        member_schedule.addItemDecoration(LessonItemDecorator(resources.getDimensionPixelSize(R.dimen.margin_default)))
     }
 
     override fun render(viewState: MemberDetailsViewState) {

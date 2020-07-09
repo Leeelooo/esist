@@ -35,6 +35,8 @@ class GroupDetailsViewModel @ViewModelInject constructor(
                 groupDetailsRepository.addMemberToGroup(action.memberId, action.groupId)
             is GroupDetailsAction.ChooseLessonToAdd ->
                 groupDetailsRepository.addLessonToGroup(action.lessonId, action.groupId)
+            is GroupDetailsAction.StatisticAction ->
+                groupDetailsRepository.getAttendance(groupId = action.groupId)
         }
     }
 

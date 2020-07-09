@@ -2,7 +2,6 @@ package com.leeloo.esist.group.details
 
 import com.leeloo.esist.base.BaseRepository
 import com.leeloo.esist.group.GroupLocalDataSource
-import com.leeloo.esist.group.list.GroupModelState
 import com.leeloo.esist.lesson.LessonLocalDataSource
 import com.leeloo.esist.member.MemberLocalDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,6 +20,7 @@ interface GroupDetailsRepository : BaseRepository<GroupDetailsModelState> {
     suspend fun addMemberToGroup(memberId: Long, groupId: Long)
     suspend fun addLessonToGroup(lessonId: Long, groupId: Long)
     fun initial()
+    suspend fun getAttendance(groupId: Long)
 }
 
 @ExperimentalCoroutinesApi
@@ -77,6 +77,11 @@ class GroupDetailsRepositoryImpl(
 
     override fun initial() {
         modelStateFlow.value = GroupDetailsModelState.Loading
+    }
+
+    override suspend fun getAttendance(groupId: Long) {
+        val groupAttendance = groupLocalDataSource.getAttendance(groupId)
+        modelStateFlow.value = GroupDetailsModelState.AttendanceLoaded(groupAttendance)
     }
 
 }
