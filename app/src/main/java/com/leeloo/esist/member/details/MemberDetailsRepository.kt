@@ -8,6 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 interface MemberDetailsRepository : BaseRepository<MemberDetailsModelState> {
     suspend fun loadMemberDetails(memberId: Long)
+    fun initial()
+    suspend fun loadMemberStatistic(memberId: Long)
+    fun dismissDialog()
 }
 
 @ExperimentalCoroutinesApi
@@ -28,6 +31,20 @@ class MemberDetailsRepositoryImpl(
             } else {
                 MemberDetailsModelState.MemberDetailsLoadingError(Exception("Error"))
             }
+    }
+
+    override fun initial() {
+        modelStateFlow.value = MemberDetailsModelState.InitialLoading
+    }
+
+    override suspend fun loadMemberStatistic(memberId: Long) {
+        modelStateFlow.value = MemberDetailsModelState.MemberStatisticLoaded(
+            memberLocalDataSource.getMemberStatistic(memberId)
+        )
+    }
+
+    override fun dismissDialog() {
+        modelStateFlow.value = MemberDetailsModelState.DismissDialog
     }
 
 

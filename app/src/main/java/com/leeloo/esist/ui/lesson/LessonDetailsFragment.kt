@@ -5,9 +5,11 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.leeloo.esist.R
 import com.leeloo.esist.base.BaseFragment
 import com.leeloo.esist.base.BaseViewModel
+import com.leeloo.esist.group.details.GroupDetailsIntent
 import com.leeloo.esist.lesson.details.LessonDetailsAction
 import com.leeloo.esist.lesson.details.LessonDetailsIntent
 import com.leeloo.esist.lesson.details.LessonDetailsViewModel
@@ -16,6 +18,7 @@ import com.leeloo.esist.ui.nav.Coordinator
 import com.leeloo.esist.ui.nav.CoordinatorImpl
 import com.leeloo.esist.ui.recycler.adapters.LessonAttendanceAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.bottom_attendance.*
 import kotlinx.android.synthetic.main.fragment_lesson_details.*
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_member_details.back_arrow
@@ -29,6 +32,7 @@ class LessonDetailsFragment :
     private val _intents: MutableStateFlow<LessonDetailsIntent> =
         MutableStateFlow(LessonDetailsIntent.InitialIntent)
 
+    private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var coordinator: Coordinator
     private lateinit var adapter: LessonAttendanceAdapter
     private var lessonId: Long = 0L
@@ -48,7 +52,7 @@ class LessonDetailsFragment :
         }
         back_arrow.setOnClickListener { coordinator.popBackStack() }
         lesson_statistic.setOnClickListener {
-
+            _intents.value = LessonDetailsIntent.GetAttendanceIntent(lessonId)
         }
         adapter = LessonAttendanceAdapter(
             onClick = { coordinator.navigateToMemberDetails(it) },
@@ -67,6 +71,12 @@ class LessonDetailsFragment :
                 DividerItemDecoration.VERTICAL
             )
         )
+        bottomSheetDialog = BottomSheetDialog(this.requireContext())
+        bottomSheetDialog.setContentView(R.layout.bottom_attendance)
+        bottomSheetDialog.dismissWithAnimation = true
+        bottomSheetDialog.setOnDismissListener {
+            _intents.value = LessonDetailsIntent.DismissDialogIntent
+        }
     }
 
     override fun render(viewState: LessonDetailsViewState) {
@@ -107,6 +117,15 @@ class LessonDetailsFragment :
                 viewState.lessonDetails.lessonMembers,
                 viewState.lessonDetails.checkedMembers
             )
+            if (viewState.attendance != null) {
+                bottomSheetDialog.show()
+                bottomSheetDialog.expected_count.text =
+                    viewState.attendance.expectedAttendance.toString()
+                bottomSheetDialog.visits_count.text =
+                    viewState.attendance.actualAttendance.toString()
+            } else {
+                bottomSheetDialog.dismiss()
+            }
         }
     }
 

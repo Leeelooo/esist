@@ -19,4 +19,10 @@ sealed class LessonDetailsAction : BaseAction {
         val memberId: Long
     ) : LessonDetailsAction()
 
+    data class AttendanceAction(
+        val lessonId: Long
+    ) : LessonDetailsAction()
+
+    object DismissAction : LessonDetailsAction()
+
 }

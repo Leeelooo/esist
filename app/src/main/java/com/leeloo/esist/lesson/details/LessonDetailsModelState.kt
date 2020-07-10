@@ -1,6 +1,8 @@
 package com.leeloo.esist.lesson.details
 
 import com.leeloo.esist.base.BaseModelState
+import com.leeloo.esist.db.dao.AttendanceDao
+import com.leeloo.esist.vo.Attendance
 import com.leeloo.esist.vo.LessonDetails
 
 sealed class LessonDetailsModelState : BaseModelState<LessonDetailsViewState> {
@@ -22,6 +24,18 @@ sealed class LessonDetailsModelState : BaseModelState<LessonDetailsViewState> {
     ) : LessonDetailsModelState() {
         override fun reduce(oldState: LessonDetailsViewState): LessonDetailsViewState =
             LessonDetailsViewState.lessonDetailsLoadingError(lessonDetailsLoadingError)
+    }
+
+    class LessonDetailsAttendance(
+        private val attendance: Attendance
+    ) : LessonDetailsModelState() {
+        override fun reduce(oldState: LessonDetailsViewState): LessonDetailsViewState =
+            LessonDetailsViewState.showAttendance(oldState.lessonDetails, attendance)
+    }
+
+    object DismissDialog : LessonDetailsModelState() {
+        override fun reduce(oldState: LessonDetailsViewState): LessonDetailsViewState =
+            LessonDetailsViewState.lessonDetailsLoaded(oldState.lessonDetails)
     }
 
 }

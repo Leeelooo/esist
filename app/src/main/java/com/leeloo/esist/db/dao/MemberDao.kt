@@ -20,7 +20,7 @@ interface MemberDao {
     suspend fun getMemberDetails(memberId: Long): MemberEntity?
 
     @Query(
-        "SELECT * FROM Members " +
+        "SELECT DISTINCT * FROM Members " +
                 "INNER JOIN GroupMemberCrossRef ON GroupMemberCrossRef.member_id = Members.member_id " +
                 "WHERE GroupMemberCrossRef.group_id = :groupId " +
                 "ORDER BY first_name, last_name ASC"
@@ -28,7 +28,7 @@ interface MemberDao {
     suspend fun getGroupMembers(groupId: Long): List<MemberEntity>
 
     @Query(
-        "SELECT * FROM Members " +
+        "SELECT DISTINCT * FROM Members " +
                 "INNER JOIN GroupMemberCrossRef ON GroupMemberCrossRef.member_id = Members.member_id " +
                 "WHERE GroupMemberCrossRef.group_id IN (:groupIds) " +
                 "ORDER BY first_name, last_name ASC"
@@ -36,7 +36,7 @@ interface MemberDao {
     suspend fun getGroupsMembers(groupIds: List<Long>): List<MemberEntity>
 
     @Query(
-        "SELECT * from Members as AllMembers " +
+        "SELECT DISTINCT * from Members as AllMembers " +
                 "LEFT JOIN Members as GroupMembers ON AllMembers.member_id = GroupMembers.member_id " +
                 "INNER JOIN GroupMemberCrossRef ON GroupMembers.member_id = GroupMemberCrossRef.member_id " +
                 "WHERE GroupMemberCrossRef.group_id = :groupId AND GroupMembers.member_id IS NULL " +
@@ -49,6 +49,24 @@ interface MemberDao {
 
     @Insert
     suspend fun insertMembers(members: List<MemberEntity>): List<Long>
+
+    @Query(
+        "SELECT COUNT(DISTINCT AttendanceEntity.lesson_id) FROM AttendanceEntity " +
+                "INNER JOIN Members ON Members.member_id = AttendanceEntity.member_id " +
+                "INNER JOIN Lessons ON Lessons.lesson_id = AttendanceEntity.lesson_id " +
+                "WHERE Members.member_id = :memberId AND Lessons.finish_time < :currentTimeMillis"
+    )
+    suspend fun getMemberVisitedLessonCount(memberId: Long, currentTimeMillis: Long): Int
+
+    @Query(
+        "SELECT COUNT(DISTINCT AttendanceEntity.lesson_id) FROM AttendanceEntity " +
+                "INNER JOIN Lessons ON Lessons.lesson_id = AttendanceEntity.lesson_id " +
+                "INNER JOIN LessonGroupCrossRef ON LessonGroupCrossRef.lesson_id = Lessons.lesson_id " +
+                "INNER JOIN Groups ON Groups.group_id = LessonGroupCrossRef.group_id " +
+                "INNER JOIN GroupMemberCrossRef ON GroupMemberCrossRef.group_id = Groups.group_id " +
+                "WHERE GroupMemberCrossRef.member_id = :memberId AND Lessons.finish_time < :currentTimeMillis"
+    )
+    suspend fun getMemberLessonCount(memberId: Long, currentTimeMillis: Long): Int
 
 
 }

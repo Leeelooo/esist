@@ -38,7 +38,7 @@ class GroupLocalDataSourceImpl(
 ) : GroupLocalDataSource {
 
     override suspend fun getGroups(): List<Group> =
-        groupDao.getGroups().map { it.toGroup() }
+        groupDao.getGroups().map { it.toGroup() }.toSet().toList()
 
     override suspend fun getGroupDetails(groupId: Long): GroupDetails? {
         val group = groupDao.getGroupDetails(groupId) ?: return null
@@ -46,8 +46,8 @@ class GroupLocalDataSourceImpl(
             groupId = group.groupId,
             groupName = group.groupName,
             groupColor = group.groupColor,
-            groupSchedule = lessonDao.getGroupLessons(groupId).map { it.toLesson() },
-            groupMembers = memberDao.getGroupMembers(groupId).map { it.toMember() }
+            groupSchedule = lessonDao.getGroupLessons(groupId).map { it.toLesson() }.toSet().toList(),
+            groupMembers = memberDao.getGroupMembers(groupId).map { it.toMember() }.toSet().toList()
         )
     }
 
@@ -96,8 +96,11 @@ class GroupLocalDataSourceImpl(
     }
 
     override suspend fun getAttendance(groupId: Long): Attendance {
-        val memberCount = groupDao.getGroupMemberCount(groupId) * groupDao.getLessonsCount(groupId)
-        val attendanceCount = groupDao.getGroupAttendance(groupId)
+        val memberCount = groupDao.getGroupMemberCount(groupId) * groupDao.getLessonsCount(
+            groupId,
+            System.currentTimeMillis()
+        )
+        val attendanceCount = groupDao.getGroupAttendance(groupId, System.currentTimeMillis())
         return Attendance(expectedAttendance = memberCount, actualAttendance = attendanceCount)
     }
 

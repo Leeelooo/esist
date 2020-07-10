@@ -38,4 +38,16 @@ sealed class LessonDetailsIntent : BaseIntent<LessonDetailsAction> {
             LessonDetailsAction.RemoveAttendanceAction(lessonId, memberId)
     }
 
+    class GetAttendanceIntent(
+        private val lessonId: Long
+    ) : LessonDetailsIntent() {
+        override fun convertToAction(): LessonDetailsAction =
+            LessonDetailsAction.AttendanceAction(lessonId)
+    }
+
+    object DismissDialogIntent : LessonDetailsIntent() {
+        override fun convertToAction(): LessonDetailsAction =
+            LessonDetailsAction.DismissAction
+    }
+
 }

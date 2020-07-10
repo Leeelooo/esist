@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.leeloo.esist.R
 import com.leeloo.esist.base.BaseFragment
 import com.leeloo.esist.base.BaseViewModel
@@ -21,6 +22,7 @@ import com.leeloo.esist.ui.recycler.adapters.MemberGroupsAdapter
 import com.leeloo.esist.ui.recycler.adapters.MemberLessonAdapter
 import com.leeloo.esist.ui.recycler.decor.LessonItemDecorator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.bottom_attendance.*
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_member_details.*
 import kotlinx.coroutines.flow.Flow
@@ -35,6 +37,7 @@ class MemberDetailsFragment :
     private val _intents: MutableStateFlow<MemberDetailsIntent> =
         MutableStateFlow(MemberDetailsIntent.InitialIntent)
 
+    private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var groupAdapter: MemberGroupsAdapter
     private lateinit var lessonAdapter: MemberLessonAdapter
 
@@ -81,6 +84,12 @@ class MemberDetailsFragment :
         member_schedule.adapter = lessonAdapter
         member_schedule.layoutManager = LinearLayoutManager(context)
         member_schedule.addItemDecoration(LessonItemDecorator(resources.getDimensionPixelSize(R.dimen.margin_default)))
+        bottomSheetDialog = BottomSheetDialog(this.requireContext())
+        bottomSheetDialog.setContentView(R.layout.bottom_attendance)
+        bottomSheetDialog.dismissWithAnimation = true
+        bottomSheetDialog.setOnDismissListener {
+            _intents.value = MemberDetailsIntent.DismissIntent
+        }
     }
 
     override fun render(viewState: MemberDetailsViewState) {
@@ -100,6 +109,15 @@ class MemberDetailsFragment :
                 member_icon.drawable,
                 ContextCompat.getColor(requireContext(), viewState.memberDetails.memberColor)
             )
+            if (viewState.attendance != null) {
+                bottomSheetDialog.show()
+                bottomSheetDialog.expected_count.text =
+                    viewState.attendance.expectedAttendance.toString()
+                bottomSheetDialog.visits_count.text =
+                    viewState.attendance.actualAttendance.toString()
+            } else {
+                bottomSheetDialog.dismiss()
+            }
             if (viewState.memberDetails.memberSchedule.isNotEmpty() && !isJumpedToPresent) {
                 try {
                     val upcomingLesson = viewState.memberDetails.memberSchedule.first {

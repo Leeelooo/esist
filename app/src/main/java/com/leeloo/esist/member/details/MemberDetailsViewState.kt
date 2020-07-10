@@ -1,7 +1,7 @@
 package com.leeloo.esist.member.details
 
 import com.leeloo.esist.base.BaseViewState
-import com.leeloo.esist.vo.Lesson
+import com.leeloo.esist.vo.Attendance
 import com.leeloo.esist.vo.MemberDetails
 
 data class MemberDetailsViewState(
@@ -9,8 +9,7 @@ data class MemberDetailsViewState(
     val memberDetails: MemberDetails?,
     val memberDetailsLoadingError: Throwable?,
     val isDialogOpen: Boolean,
-    val visitedLessons: List<Lesson>,
-    val pastLessons: List<Lesson>
+    val attendance: Attendance?
 ) : BaseViewState {
     companion object {
         val initialLoading: MemberDetailsViewState = MemberDetailsViewState(
@@ -18,8 +17,7 @@ data class MemberDetailsViewState(
             memberDetails = null,
             memberDetailsLoadingError = null,
             isDialogOpen = false,
-            visitedLessons = emptyList(),
-            pastLessons = emptyList()
+            attendance = null
         )
 
         fun memberDetailsLoaded(
@@ -29,8 +27,7 @@ data class MemberDetailsViewState(
             memberDetails = memberDetails,
             memberDetailsLoadingError = null,
             isDialogOpen = false,
-            visitedLessons = emptyList(),
-            pastLessons = emptyList()
+            attendance = null
         )
 
         fun lessonDetailsLoadingError(
@@ -40,21 +37,18 @@ data class MemberDetailsViewState(
             memberDetails = null,
             memberDetailsLoadingError = memberDetailsLoadingError,
             isDialogOpen = false,
-            visitedLessons = emptyList(),
-            pastLessons = emptyList()
+            attendance = null
         )
 
         fun lessonDetailsStatistic(
             memberDetails: MemberDetails?,
-            visitedLessons: List<Lesson>,
-            pastLessons: List<Lesson>
+            attendance: Attendance
         ): MemberDetailsViewState = MemberDetailsViewState(
             loadingMemberDetails = false,
             memberDetails = memberDetails,
             memberDetailsLoadingError = null,
             isDialogOpen = true,
-            visitedLessons = visitedLessons,
-            pastLessons = pastLessons
+            attendance = attendance
         )
 
     }

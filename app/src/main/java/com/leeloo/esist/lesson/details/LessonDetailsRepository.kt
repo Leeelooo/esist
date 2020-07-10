@@ -11,6 +11,8 @@ interface LessonDetailsRepository : BaseRepository<LessonDetailsModelState> {
     suspend fun setAttendance(lessonId: Long, memberId: Long)
     suspend fun removeAttendance(lessonId: Long, memberId: Long)
     fun initial()
+    suspend fun getAttendance(lessonId: Long)
+    fun dismissDialog()
 }
 
 @ExperimentalCoroutinesApi
@@ -43,6 +45,16 @@ class LessonDetailsRepositoryImpl(
 
     override fun initial() {
         modelStateFlow.value = LessonDetailsModelState.InitialLoading
+    }
+
+    override suspend fun getAttendance(lessonId: Long) {
+        modelStateFlow.value = LessonDetailsModelState.LessonDetailsAttendance(
+            lessonLocalDataSource.getAttendance(lessonId)
+        )
+    }
+
+    override fun dismissDialog() {
+        modelStateFlow.value = LessonDetailsModelState.DismissDialog
     }
 
 

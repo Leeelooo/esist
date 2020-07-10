@@ -38,4 +38,7 @@
     <string name="lesson_details_book">Книги:</string>
     <string name="lesson_details_homework">Задание:</string>
     <string name="lesson_details_subject">Предмет:</string>
+    <string name="bottom_attendance_title">Посещаемость</string>
+    <string name="bottom_attendance_expected">Ожидалось:</string>
+    <string name="bottom_attendance_visits">Посещений:</string>
 </resources>

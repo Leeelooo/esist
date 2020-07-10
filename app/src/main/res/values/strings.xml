@@ -38,4 +38,7 @@
     <string name="lesson_details_book">Books:</string>
     <string name="lesson_details_homework">Homework:</string>
     <string name="lesson_details_subject">Subject:</string>
+    <string name="bottom_attendance_title">Attendance</string>
+    <string name="bottom_attendance_expected">Expected:</string>
+    <string name="bottom_attendance_visits">Visits:</string>
 </resources>

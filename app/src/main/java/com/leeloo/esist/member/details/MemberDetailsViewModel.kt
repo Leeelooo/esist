@@ -19,8 +19,14 @@ class MemberDetailsViewModel @ViewModelInject constructor(
 
     override suspend fun processAction(action: MemberDetailsAction) {
         when (action) {
+            is MemberDetailsAction.InitialAction ->
+                memberDetailsRepository.initial()
             is MemberDetailsAction.LoadMemberDetailsAction ->
                 memberDetailsRepository.loadMemberDetails(action.memberId)
+            is MemberDetailsAction.MemberStatisticAction ->
+                memberDetailsRepository.loadMemberStatistic(action.memberId)
+            is MemberDetailsAction.DismissDialogAction ->
+                memberDetailsRepository.dismissDialog()
         }
     }
 

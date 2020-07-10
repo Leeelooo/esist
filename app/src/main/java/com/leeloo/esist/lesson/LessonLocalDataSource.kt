@@ -3,6 +3,7 @@ package com.leeloo.esist.lesson
 import com.leeloo.esist.base.BaseDataSource
 import com.leeloo.esist.db.dao.*
 import com.leeloo.esist.db.entity.*
+import com.leeloo.esist.vo.Attendance
 import com.leeloo.esist.vo.Lesson
 import com.leeloo.esist.vo.LessonDetails
 
@@ -20,6 +21,8 @@ interface LessonLocalDataSource : BaseDataSource {
         lesson: Lesson,
         groups: List<Long>
     ): Boolean
+
+    suspend fun getAttendance(lessonId: Long): Attendance
 }
 
 class LessonLocalDataSourceImpl(
@@ -31,7 +34,7 @@ class LessonLocalDataSourceImpl(
 ) : LessonLocalDataSource {
 
     override suspend fun getLessons(): List<Lesson> =
-        lessonDao.getLessons().map { it.toLesson() }
+        lessonDao.getLessons().map { it.toLesson() }.toSet().toList()
 
     override suspend fun getLessonDetails(lessonId: Long): LessonDetails? {
         val lesson = lessonDao.getLessonDetails(lessonId) ?: return null
@@ -45,8 +48,9 @@ class LessonLocalDataSourceImpl(
             lessonSubject = lesson.subjectName,
             lessonHomework = lesson.homework,
             lessonMembers = memberDao.getGroupsMembers(groups.map { it.groupId })
-                .map { it.toMember() },
-            checkedMembers = attendanceDao.getVisitedMembers(lessonId).map { it.toMember() },
+                .map { it.toMember() }.toSet().toList(),
+            checkedMembers = attendanceDao.getVisitedMembers(lessonId).map { it.toMember() }.toSet()
+                .toList(),
             lessonBook = lesson.book
         )
     }
@@ -79,6 +83,17 @@ class LessonLocalDataSourceImpl(
         return groups.map {
             crossRefDao.insertLessonToGroup(LessonGroupCrossRef(groupId = it, lessonId = lessonId))
         }.all { it != 0L }
+    }
+
+    override suspend fun getAttendance(lessonId: Long): Attendance {
+        val lessonTotalMemberCount =
+            lessonDao.getTotalMemberCount(lessonId, System.currentTimeMillis())
+        val lessonVisitedMemberCount =
+            lessonDao.getVisitedMemberCount(lessonId, System.currentTimeMillis())
+        return Attendance(
+            expectedAttendance = lessonTotalMemberCount,
+            actualAttendance = lessonVisitedMemberCount
+        )
     }
 
 }

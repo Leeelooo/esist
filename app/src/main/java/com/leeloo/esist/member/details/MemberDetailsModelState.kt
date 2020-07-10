@@ -1,6 +1,7 @@
 package com.leeloo.esist.member.details
 
 import com.leeloo.esist.base.BaseModelState
+import com.leeloo.esist.vo.Attendance
 import com.leeloo.esist.vo.Lesson
 import com.leeloo.esist.vo.MemberDetails
 
@@ -26,14 +27,12 @@ sealed class MemberDetailsModelState : BaseModelState<MemberDetailsViewState> {
     }
 
     class MemberStatisticLoaded(
-        private val visitedLessons: List<Lesson>,
-        private val pastLessons: List<Lesson>
+        val attendance: Attendance
     ) : MemberDetailsModelState() {
         override fun reduce(oldState: MemberDetailsViewState): MemberDetailsViewState =
             MemberDetailsViewState.lessonDetailsStatistic(
                 oldState.memberDetails,
-                visitedLessons,
-                pastLessons
+                attendance
             )
     }
 

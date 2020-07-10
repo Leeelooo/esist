@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.PagerAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.leeloo.esist.R
 import com.leeloo.esist.base.BaseFragment
 import com.leeloo.esist.base.BaseViewModel
@@ -20,6 +21,7 @@ import com.leeloo.esist.ui.recycler.adapters.LessonStateAdapter
 import com.leeloo.esist.ui.recycler.adapters.MemberStateAdapter
 import com.leeloo.esist.ui.recycler.decor.LessonItemDecorator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.bottom_attendance.*
 import kotlinx.android.synthetic.main.fragment_group_details.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +33,7 @@ class GroupDetailsFragment :
     private val _intents: MutableStateFlow<GroupDetailsIntent> =
         MutableStateFlow(GroupDetailsIntent.InitialIntent)
 
+    private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var lessonAdapter: LessonStateAdapter
     private lateinit var memberAdapter: MemberStateAdapter
     private lateinit var pagerAdapter: ScreenSlidePagerAdapter
@@ -76,9 +79,12 @@ class GroupDetailsFragment :
         group_statistic.setOnClickListener {
             _intents.value = GroupDetailsIntent.CheckStatisticIntent(groupId)
         }
-//        add_fab.setOnClickListener {
-//
-//        }
+        bottomSheetDialog = BottomSheetDialog(this.requireContext())
+        bottomSheetDialog.setContentView(R.layout.bottom_attendance)
+        bottomSheetDialog.dismissWithAnimation = true
+        bottomSheetDialog.setOnDismissListener {
+            _intents.value = GroupDetailsIntent.DismissDialogIntent
+        }
     }
 
     override fun render(viewState: GroupDetailsViewState) {
@@ -96,11 +102,13 @@ class GroupDetailsFragment :
                 isLoading = false
             )
             if (viewState.attendance != null) {
-                Toast.makeText(
-                    context,
-                    viewState.attendance.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+                bottomSheetDialog.show()
+                bottomSheetDialog.expected_count.text =
+                    viewState.attendance.expectedAttendance.toString()
+                bottomSheetDialog.visits_count.text =
+                    viewState.attendance.actualAttendance.toString()
+            } else {
+                bottomSheetDialog.dismiss()
             }
         }
     }
